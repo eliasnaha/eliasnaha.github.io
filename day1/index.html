@@ -136,16 +136,26 @@
   .sec-note { font-family: var(--mono); font-size: 12px; color: var(--ink-mute); }
 
   /* ---------- demo entries ---------- */
+  /* all demos of a day sit on ONE row (future days become future rows) */
+  .demo-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 22px;
+  }
+  @media (min-width: 700px)  { .demo-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1000px) { .demo-grid { grid-template-columns: repeat(3, 1fr); } }
   .entry {
     background: var(--panel);
     border: 1px solid var(--line);
     border-radius: 10px;
     box-shadow: var(--shadow);
-    padding: 22px;
-    margin-top: 22px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
   }
   .entry-top {
-    display: flex; align-items: center; gap: 14px; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
   }
   .idx {
     font-family: var(--mono); font-size: 12px; font-weight: 600;
@@ -167,10 +177,10 @@
 
   /* prompt: a REPL bar */
   .prompt {
-    font-family: var(--mono); font-size: 15px;
+    font-family: var(--mono); font-size: 12px;
     background: var(--panel-2); border: 1px solid var(--line);
-    border-radius: 7px; padding: 12px 14px; color: var(--ink);
-    display: flex; gap: 10px; align-items: baseline; overflow-x: auto;
+    border-radius: 7px; padding: 10px 12px; color: var(--ink);
+    display: flex; gap: 9px; align-items: baseline; overflow-x: auto;
   }
   .prompt .caret { color: var(--accent); font-weight: 700; flex: none; }
   .prompt .cmd { white-space: nowrap; }
@@ -193,13 +203,13 @@
   .telemetry .num { color: var(--ink); font-variant-numeric: tabular-nums; }
 
   /* influence note */
-  .impact { margin-top: 16px; display: flex; gap: 14px; }
+  .impact { margin-top: 14px; display: flex; flex-direction: column; gap: 7px; }
   .impact .tag {
     flex: none; font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em;
-    text-transform: uppercase; color: var(--ink-mute); padding-top: 3px;
+    text-transform: uppercase; color: var(--ink-mute);
     writing-mode: horizontal-tb;
   }
-  .impact p { margin: 0; color: var(--ink-soft); font-size: 15.5px; }
+  .impact p { margin: 0; color: var(--ink-soft); font-size: 13.5px; }
   .impact p b { color: var(--ink); font-weight: 640; }
   .impact code {
     font-family: var(--mono); font-size: .86em; color: var(--accent);
@@ -266,6 +276,7 @@
     <span class="sec-note">command → play → verifier impact</span>
   </div>
 
+  <div class="demo-grid">
   <!-- 01 -->
   <article class="entry">
     <div class="entry-top">
@@ -339,6 +350,7 @@
         verifier judges what the world <i>does</i>, not what the code that built it claims.</p>
     </div>
   </article>
+  </div>
 
   <div class="sec-label">
     <h2>How a scene is checked</h2>
