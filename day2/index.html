@@ -1,0 +1,409 @@
+<title>Day 2 — The Machine Designs Its Own Games</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --bg: #f3f4f8;
+    --panel: #ffffff;
+    --panel-2: #eef0f5;
+    --line: #d9dce6;
+    --line-strong: #c3c8d6;
+    --ink: #171a22;
+    --ink-soft: #444a5a;
+    --ink-mute: #6b7285;
+    --accent: #1f9d57;      /* agent-green, darkened for light ground */
+    --blue: #2f74d6;        /* ball */
+    --amber: #b9821a;       /* zone / warning */
+    --grid: rgba(23,26,34,.05);
+    --shadow: 0 1px 2px rgba(20,24,40,.06), 0 8px 30px rgba(20,24,40,.06);
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", "Menlo", "Consolas", monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0d0e13;
+      --panel: #16181f;
+      --panel-2: #1b1e27;
+      --line: #262a35;
+      --line-strong: #333846;
+      --ink: #e7e9f0;
+      --ink-soft: #b7bccb;
+      --ink-mute: #878da0;
+      --accent: #5ecd82;
+      --blue: #5ea4ff;
+      --amber: #f0be46;
+      --grid: rgba(255,255,255,.035);
+      --shadow: 0 1px 0 rgba(255,255,255,.02), 0 20px 50px rgba(0,0,0,.45);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #f3f4f8; --panel: #ffffff; --panel-2: #eef0f5; --line: #d9dce6;
+    --line-strong: #c3c8d6; --ink: #171a22; --ink-soft: #444a5a; --ink-mute: #6b7285;
+    --accent: #1f9d57; --blue: #2f74d6; --amber: #b9821a; --grid: rgba(23,26,34,.05);
+    --shadow: 0 1px 2px rgba(20,24,40,.06), 0 8px 30px rgba(20,24,40,.06);
+  }
+  :root[data-theme="dark"] {
+    --bg: #0d0e13; --panel: #16181f; --panel-2: #1b1e27; --line: #262a35;
+    --line-strong: #333846; --ink: #e7e9f0; --ink-soft: #b7bccb; --ink-mute: #878da0;
+    --accent: #5ecd82; --blue: #5ea4ff; --amber: #f0be46; --grid: rgba(255,255,255,.035);
+    --shadow: 0 1px 0 rgba(255,255,255,.02), 0 20px 50px rgba(0,0,0,.45);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 40px 40px;
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- machine voice ---------- */
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .eyebrow .tick { color: var(--accent); }
+  .eyebrow a.home { color: var(--ink-soft); text-decoration: none; border-bottom: 1px solid var(--line-strong); }
+  .eyebrow a.home:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* ---------- header ---------- */
+  header { padding: 72px 0 40px; border-bottom: 1px solid var(--line); }
+  h1 {
+    font-family: var(--sans);
+    font-weight: 760;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    font-size: clamp(30px, 6vw, 52px);
+    margin: 20px 0 0;
+    text-wrap: balance;
+  }
+  h1 .cursor {
+    display: inline-block; width: .58em; height: 1.02em;
+    background: var(--accent); transform: translateY(.12em); margin-left: .12em;
+    animation: blink 1.15s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+  .lede {
+    font-size: 18px; color: var(--ink-soft);
+    max-width: 62ch; margin: 22px 0 0;
+  }
+  .lede b { color: var(--ink); font-weight: 640; }
+  .meta {
+    margin-top: 30px; display: flex; flex-wrap: wrap; gap: 10px;
+    font-family: var(--mono); font-size: 12.5px;
+  }
+  .chip {
+    border: 1px solid var(--line-strong); border-radius: 4px;
+    padding: 5px 10px; color: var(--ink-soft); background: var(--panel);
+    display: inline-flex; gap: 8px; align-items: center;
+  }
+  .chip .k { color: var(--ink-mute); }
+  .chip .v { color: var(--ink); }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent); }
+
+  /* ---------- intro ---------- */
+  .intro { padding: 40px 0 8px; }
+  .intro p { max-width: 66ch; color: var(--ink-soft); margin: 0 0 16px; }
+  .intro p b { color: var(--ink); font-weight: 640; }
+  .intro .callout {
+    font-family: var(--mono); font-size: 13.5px; line-height: 1.7;
+    color: var(--ink-soft);
+    border-left: 2px solid var(--accent);
+    padding: 4px 0 4px 16px; margin: 22px 0 0;
+  }
+  .intro .callout b { color: var(--ink); }
+
+  /* ---------- section label ---------- */
+  .sec-label {
+    display: flex; align-items: baseline; gap: 14px;
+    margin: 56px 0 8px; padding-top: 20px;
+  }
+  .sec-label h2 {
+    font-size: 13px; font-family: var(--mono); text-transform: uppercase;
+    letter-spacing: .16em; color: var(--ink); margin: 0; font-weight: 600;
+  }
+  .sec-label .rule { flex: 1; height: 1px; background: var(--line); }
+  .sec-note { font-family: var(--mono); font-size: 12px; color: var(--ink-mute); }
+
+  /* ---------- demo entries ---------- */
+  /* all demos of a day sit on ONE row (future days become future rows) */
+  .demo-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 22px;
+  }
+  @media (min-width: 700px)  { .demo-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1000px) { .demo-grid { grid-template-columns: repeat(3, 1fr); } }
+  .entry {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+  }
+  .entry-top {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
+  }
+  .idx {
+    font-family: var(--mono); font-size: 12px; font-weight: 600;
+    color: var(--ink-mute); letter-spacing: .1em;
+  }
+  .entry-title {
+    font-family: var(--mono); font-size: 13px; color: var(--ink-soft);
+    letter-spacing: .04em;
+  }
+  .verdict {
+    margin-left: auto; font-family: var(--mono); font-size: 11.5px;
+    font-weight: 640; letter-spacing: .1em; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 4px; border: 1px solid;
+    display: inline-flex; align-items: center; gap: 7px;
+  }
+  .verdict::before { content:""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .verdict.pass { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 45%, transparent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
+  .verdict.reject { color: var(--amber); border-color: color-mix(in srgb, var(--amber) 45%, transparent); background: color-mix(in srgb, var(--amber) 10%, transparent); }
+
+  /* prompt: a REPL bar */
+  .prompt {
+    font-family: var(--mono); font-size: 12px;
+    background: var(--panel-2); border: 1px solid var(--line);
+    border-radius: 7px; padding: 10px 12px; color: var(--ink);
+    display: flex; gap: 9px; align-items: baseline; overflow-x: auto;
+  }
+  .prompt .caret { color: var(--accent); font-weight: 700; flex: none; }
+  .prompt .cmd { white-space: nowrap; }
+
+  /* viewport: framed screen for the gif */
+  .viewport {
+    margin-top: 14px;
+    border: 1px solid var(--line-strong);
+    border-radius: 8px; overflow: hidden; background: #12131a;
+    position: relative;
+  }
+  .viewport img { display: block; width: 100%; height: auto; image-rendering: auto; }
+  .telemetry {
+    display: flex; flex-wrap: wrap; gap: 6px 18px;
+    font-family: var(--mono); font-size: 12px; color: var(--ink-mute);
+    padding: 10px 14px; border-top: 1px solid var(--line);
+    background: var(--panel);
+  }
+  .telemetry b { color: var(--ink-soft); font-weight: 600; }
+  .telemetry .num { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+  /* influence note */
+  .impact { margin-top: 14px; display: flex; flex-direction: column; gap: 7px; }
+  .impact .tag {
+    flex: none; font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--ink-mute);
+    writing-mode: horizontal-tb;
+  }
+  .impact p { margin: 0; color: var(--ink-soft); font-size: 13.5px; }
+  .impact p b { color: var(--ink); font-weight: 640; }
+  .impact code {
+    font-family: var(--mono); font-size: .86em; color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    padding: 1px 5px; border-radius: 3px;
+  }
+
+  /* ---------- funnel ---------- */
+  .funnel { display: grid; gap: 12px; margin-top: 22px; }
+  @media (min-width: 640px) { .funnel { grid-template-columns: repeat(3, 1fr); } }
+  .layer {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 9px; padding: 16px 16px 18px;
+  }
+  .layer .tier { font-family: var(--mono); font-size: 12px; color: var(--accent); letter-spacing: .1em; }
+  .layer h3 { margin: 8px 0 6px; font-size: 15px; letter-spacing: -.01em; }
+  .layer p { margin: 0; font-size: 13.5px; color: var(--ink-mute); }
+
+  /* ---------- footer ---------- */
+  footer {
+    margin-top: 64px; padding: 30px 0 60px;
+    border-top: 1px solid var(--line);
+    font-family: var(--mono); font-size: 12.5px; color: var(--ink-mute);
+    display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between;
+  }
+  footer b { color: var(--ink-soft); font-weight: 600; }
+
+  @media (prefers-reduced-motion: reduce) {
+    h1 .cursor { animation: none; }
+  }
+</style>
+<style>
+  /* day-2 additions: 4-layer funnel */
+  .funnel4 { display: grid; gap: 12px; margin-top: 22px; grid-template-columns: 1fr; }
+  @media (min-width: 640px)  { .funnel4 { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1000px) { .funnel4 { grid-template-columns: repeat(4, 1fr); } }
+  .milestone-note {
+    font-family: var(--mono); font-size: 12.5px; color: var(--ink-soft);
+    border: 1px dashed color-mix(in srgb, var(--amber) 55%, var(--line));
+    border-radius: 7px; padding: 10px 14px; margin-top: 18px;
+  }
+  .milestone-note b { color: var(--amber); }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow"><a class="home" href="../"><span class="tick">◆</span> Build log</a> · Day 02 · Infinite environment generation</div>
+    <h1>The machine designs its own games<span class="cursor"></span></h1>
+    <p class="lede">Yesterday the harness filled in the numbers of scenes <i>we</i> had designed.
+      Today the model writes the <b>whole game</b> from one prompt: its entities, its own
+      action set, its rules, its win and lose conditions — and its <b>milestones</b>, the
+      checkpoints the verifier uses to tell it exactly where a broken game is stuck.</p>
+    <div class="meta">
+      <span class="chip"><span class="dot"></span><span class="k">games</span><span class="v">3 originals, 3 mechanics</span></span>
+      <span class="chip"><span class="k">attempts</span><span class="v">8 total</span></span>
+      <span class="chip"><span class="k">failures caught</span><span class="v">5, all repaired</span></span>
+      <span class="chip"><span class="k">verifier</span><span class="v">code-only, no VLM</span></span>
+    </div>
+  </header>
+
+  <section class="intro">
+    <p>The harness got out of the game-design business. The generator prompt no longer
+      contains a worked example or a genre — only a minimal physics vocabulary (bodies,
+      joints, sensors, forces) and a contract: declare your actions, write their
+      semantics, define <code>success</code>, <code>failure</code>, and 1–6 ordered
+      <b>milestone predicates</b> that decompose your own rules.</p>
+    <p>What the game can never define is <b>sanity</b>. Universal oracles run outside its
+      reach: numerical health, determinism, agency (doing nothing must never win), action
+      efficacy (every declared action must measurably do something), goal well-formedness,
+      and solvability — a seeded random search that must actually win the game. The winning
+      action sequence it finds — the <b>witness</b> — is what plays in the clips below.</p>
+    <p class="callout">Every failed attempt below was caught by a machine check and repaired
+      through the report alone: <b>no human looked at the game code</b>. The stuck-between-milestones
+      diagnosis did the pinpointing.</p>
+  </section>
+
+  <div class="sec-label">
+    <h2>Demos</h2>
+    <span class="rule"></span>
+    <span class="sec-note">one prompt → one original game → verified → witness replay</span>
+  </div>
+
+  <div class="demo-grid">
+    <!-- 01 lander -->
+    <article class="entry">
+      <div class="entry-top">
+        <span class="idx">01</span>
+        <span class="entry-title">retro_burn_lander</span>
+        <span class="verdict pass">pass</span>
+      </div>
+      <div class="prompt"><span class="caret">&gt;</span><span class="cmd">a lunar lander: touch down gently on the pad — too fast, or the rocks, destroys the ship</span></div>
+      <div class="viewport">
+        <img src="media/lander.gif" alt="A green lander descends between rock masses and settles softly on a glowing pad." loading="lazy">
+        <div class="telemetry">
+          <span><b>attempts</b> <span class="num">2</span></span>
+          <span><b>witness</b> <span class="num">68 ticks</span></span>
+          <span><b>milestones</b> <span class="num">5/5 latched</span></span>
+        </div>
+      </div>
+      <div class="impact">
+        <span class="tag">What the verifier caught</span>
+        <p>Attempt 1 rejected: <code>coast</code> was a <b>dead action</b> — measured world-effect
+          exactly <code>0.0</code> while <code>burn</code> scored 91. The repair made every action
+          live. The game's own twist: free-fall is always lethal, so winning demands timed
+          retro burns.</p>
+      </div>
+    </article>
+
+    <!-- 02 wrecking -->
+    <article class="entry">
+      <div class="entry-top">
+        <span class="idx">02</span>
+        <span class="entry-title">wrecking_ball_yard</span>
+        <span class="verdict pass">pass</span>
+      </div>
+      <div class="prompt"><span class="caret">&gt;</span><span class="cmd">a wrecking ball on a chain: swing it to knock the crate tower off its ledge</span></div>
+      <div class="viewport">
+        <img src="media/wrecking.gif" alt="A heavy green ball hanging from a crane pumps into a swing and smashes a stack of crates off a ledge." loading="lazy">
+        <div class="telemetry">
+          <span><b>attempts</b> <span class="num">2</span></span>
+          <span><b>witness</b> <span class="num">68 ticks</span></span>
+          <span><b>milestones</b> <span class="num">4/4 latched</span></span>
+        </div>
+      </div>
+      <div class="impact">
+        <span class="tag">What the verifier caught</span>
+        <p>Attempt 1 unsolvable — diagnosis: <b>stuck between</b> <code>swing_started</code> and
+          <code>reached_crates</code>, and the action-efficacy numbers were lopsided (80 vs 206):
+          the ledge itself was blocking the swing path. One geometry fix, then a pendulum you
+          pump into resonance — no single action wins.</p>
+      </div>
+    </article>
+
+    <!-- 03 volcano -->
+    <article class="entry">
+      <div class="entry-top">
+        <span class="idx">03</span>
+        <span class="entry-title">volcano_hopper</span>
+        <span class="verdict pass">pass</span>
+      </div>
+      <div class="prompt"><span class="caret">&gt;</span><span class="cmd">volcano hopper: climb the stone slabs before the rising lava catches you</span></div>
+      <div class="viewport">
+        <img src="media/volcano.gif" alt="A green hopper leaps up a diamond of stone slabs inside a shaft while an amber lava line rises from below." loading="lazy">
+        <div class="telemetry">
+          <span><b>attempts</b> <span class="num">4</span></span>
+          <span><b>witness</b> <span class="num">84 ticks</span></span>
+          <span><b>milestones</b> <span class="num">3/3 latched</span></span>
+        </div>
+      </div>
+      <div class="impact">
+        <span class="tag">What the verifier caught</span>
+        <p>Three rejections: a dead <code>wait</code> action, then twice <b>stuck between</b> the
+          first and second slab. The diagnosis localized the broken hop; the fix was a redesign —
+          a diamond with <b>two winning paths</b> and a lava clock that makes hesitation fatal.</p>
+      </div>
+    </article>
+  </div>
+
+  <p class="milestone-note"><b>* amber flashes</b> in the clips are milestones latching in
+    real time — the game's own checkpoints, recorded by the harness the first time each
+    becomes true. They double as the dense, code-defined progress signal a reward model
+    could train on.</p>
+
+  <div class="sec-label">
+    <h2>How a generated game is checked</h2>
+    <span class="rule"></span>
+    <span class="sec-note">universal oracles · the game can't redefine them</span>
+  </div>
+
+  <div class="funnel4">
+    <div class="layer">
+      <div class="tier">G0 · static</div>
+      <h3>Does it build?</h3>
+      <p>Sandbox-clean, required symbols, exactly one controlled body, nothing overlapping or out of bounds.</p>
+    </div>
+    <div class="layer">
+      <div class="tier">G1 · rollout</div>
+      <h3>Is it sane &amp; honest?</h3>
+      <p>No NaNs or escapes; deterministic; doing nothing never wins; every declared action measurably does something.</p>
+    </div>
+    <div class="layer">
+      <div class="tier">G2 · goal</div>
+      <h3>Are goal &amp; milestones real?</h3>
+      <p>Pure predicates, false at t=0; 1–6 ordered milestones that decompose the game's own rules.</p>
+    </div>
+    <div class="layer">
+      <div class="tier">G3 · solvability</div>
+      <h3>Can it be won?</h3>
+      <p>Seeded random search must win it; milestones guide a second pass and pinpoint where a failing game is stuck.</p>
+    </div>
+  </div>
+
+  <footer>
+    <span><b>General Intuition</b> — infinite environment generation challenge</span>
+    <span>whole games from one prompt · milestones as progress signal</span>
+  </footer>
+</div>
