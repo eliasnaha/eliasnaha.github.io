@@ -1,0 +1,114 @@
+<title>Build Log — Infinite Environment Generation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --bg:#f3f4f8; --panel:#fff; --panel-2:#eef0f5; --line:#d9dce6; --line-strong:#c3c8d6;
+    --ink:#171a22; --ink-soft:#444a5a; --ink-mute:#6b7285; --accent:#1f9d57; --amber:#b9821a;
+    --grid:rgba(23,26,34,.05); --shadow:0 1px 2px rgba(20,24,40,.06),0 8px 30px rgba(20,24,40,.06);
+    --mono:ui-monospace,"SF Mono","JetBrains Mono","Cascadia Code","Menlo","Consolas",monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){:root{
+    --bg:#0d0e13; --panel:#16181f; --panel-2:#1b1e27; --line:#262a35; --line-strong:#333846;
+    --ink:#e7e9f0; --ink-soft:#b7bccb; --ink-mute:#878da0; --accent:#5ecd82; --amber:#f0be46;
+    --grid:rgba(255,255,255,.035); --shadow:0 1px 0 rgba(255,255,255,.02),0 20px 50px rgba(0,0,0,.45);
+  }}
+  :root[data-theme="light"]{--bg:#f3f4f8;--panel:#fff;--panel-2:#eef0f5;--line:#d9dce6;--line-strong:#c3c8d6;--ink:#171a22;--ink-soft:#444a5a;--ink-mute:#6b7285;--accent:#1f9d57;--amber:#b9821a;--grid:rgba(23,26,34,.05);--shadow:0 1px 2px rgba(20,24,40,.06),0 8px 30px rgba(20,24,40,.06);}
+  :root[data-theme="dark"]{--bg:#0d0e13;--panel:#16181f;--panel-2:#1b1e27;--line:#262a35;--line-strong:#333846;--ink:#e7e9f0;--ink-soft:#b7bccb;--ink-mute:#878da0;--accent:#5ecd82;--amber:#f0be46;--grid:rgba(255,255,255,.035);--shadow:0 1px 0 rgba(255,255,255,.02),0 20px 50px rgba(0,0,0,.45);}
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:40px 40px; font-family:var(--sans); line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:800px; margin:0 auto; padding:0 24px;}
+
+  header{padding:88px 0 44px; border-bottom:1px solid var(--line);}
+  .eyebrow{font-family:var(--mono); font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--ink-mute);}
+  .eyebrow .tick{color:var(--accent);}
+  h1{font-weight:760; letter-spacing:-.025em; line-height:1.05; font-size:clamp(30px,6vw,50px); margin:20px 0 0; text-wrap:balance;}
+  .lede{font-size:18px; color:var(--ink-soft); max-width:60ch; margin:22px 0 0;}
+  .lede b{color:var(--ink); font-weight:640;}
+  .meta{margin-top:28px; display:flex; flex-wrap:wrap; gap:10px; font-family:var(--mono); font-size:12.5px;}
+  .chip{border:1px solid var(--line-strong); border-radius:4px; padding:5px 10px; color:var(--ink-soft); background:var(--panel); display:inline-flex; gap:8px; align-items:center;}
+  .chip .k{color:var(--ink-mute);} .chip .v{color:var(--ink);}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent);}
+
+  .sec-label{display:flex; align-items:baseline; gap:14px; margin:52px 0 4px;}
+  .sec-label h2{font-size:13px; font-family:var(--mono); text-transform:uppercase; letter-spacing:.16em; margin:0; font-weight:600;}
+  .sec-label .rule{flex:1; height:1px; background:var(--line);}
+  .sec-label .note{font-family:var(--mono); font-size:12px; color:var(--ink-mute);}
+
+  .days{display:flex; flex-direction:column; gap:14px; margin-top:20px;}
+  a.day{
+    display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:18px;
+    text-decoration:none; color:inherit; background:var(--panel);
+    border:1px solid var(--line); border-radius:10px; box-shadow:var(--shadow);
+    padding:20px 22px; transition:border-color .15s ease, transform .15s ease;
+  }
+  a.day:hover{border-color:color-mix(in srgb,var(--accent) 55%,var(--line)); transform:translateY(-1px);}
+  a.day:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+  .day .no{font-family:var(--mono); font-size:12px; color:var(--ink-mute); letter-spacing:.12em; align-self:start; padding-top:3px;}
+  .day .body h3{margin:0 0 4px; font-size:18px; letter-spacing:-.01em;}
+  .day .body p{margin:0; color:var(--ink-mute); font-size:14px; max-width:52ch;}
+  .day .tags{margin-top:10px; display:flex; flex-wrap:wrap; gap:6px;}
+  .day .t{font-family:var(--mono); font-size:11px; color:var(--ink-soft); border:1px solid var(--line); border-radius:4px; padding:2px 7px;}
+  .day .go{font-family:var(--mono); font-size:13px; color:var(--accent);}
+  .day.soon{opacity:.6; pointer-events:none; box-shadow:none; border-style:dashed;}
+  .day.soon .go{color:var(--ink-mute);}
+
+  footer{margin-top:60px; padding:28px 0 60px; border-top:1px solid var(--line);
+    font-family:var(--mono); font-size:12.5px; color:var(--ink-mute);
+    display:flex; flex-wrap:wrap; gap:8px 24px; justify-content:space-between;}
+  footer b{color:var(--ink-soft); font-weight:600;}
+
+  @media (max-width:520px){ a.day{grid-template-columns:auto 1fr; } .day .go{display:none;} }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow"><span class="tick">◆</span> One week · Infinite environment generation</div>
+    <h1>Building a machine that writes worlds — and checks them</h1>
+    <p class="lede">A week-long build log for the General Intuition challenge: an agent harness
+      that turns plain-language commands into small 2D physics environments, and verifies each
+      one <b>entirely in code</b> — no vision model, no guessing at pixels. New entry each day.</p>
+    <div class="meta">
+      <span class="chip"><span class="dot"></span><span class="k">day</span><span class="v">1 of the week</span></span>
+      <span class="chip"><span class="k">engine</span><span class="v">pymunk 2D</span></span>
+      <span class="chip"><span class="k">verifier</span><span class="v">code-only</span></span>
+    </div>
+  </header>
+
+  <div class="sec-label">
+    <h2>Log</h2><span class="rule"></span><span class="note">newest last</span>
+  </div>
+
+  <nav class="days">
+    <a class="day" href="day1/">
+      <span class="no">Day 01</span>
+      <span class="body">
+        <h3>First demos, and a verifier takes shape</h3>
+        <p>Text → scene → play, running end to end. Three clips — two solved, one deliberately
+          broken — and how each one changed what the verifier checks.</p>
+        <span class="tags"><span class="t">push · 150 steps</span><span class="t">climb · 222 steps</span><span class="t">reject · L1</span></span>
+      </span>
+      <span class="go">open →</span>
+    </a>
+
+    <span class="day soon">
+      <span class="no">Day 02</span>
+      <span class="body">
+        <h3>Coming next</h3>
+        <p>Solvability (L3) and the intent contract (L4) — verifying not just that a world holds
+          together, but that it can be won and matches the command.</p>
+      </span>
+      <span class="go">soon</span>
+    </span>
+  </nav>
+
+  <footer>
+    <span><b>Elias Naha</b> · General Intuition challenge</span>
+    <span>text → verified 2D worlds</span>
+  </footer>
+</div>

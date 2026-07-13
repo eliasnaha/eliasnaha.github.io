@@ -1,0 +1,371 @@
+<title>Day 1 — Text → Verified 2D Worlds</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --bg: #f3f4f8;
+    --panel: #ffffff;
+    --panel-2: #eef0f5;
+    --line: #d9dce6;
+    --line-strong: #c3c8d6;
+    --ink: #171a22;
+    --ink-soft: #444a5a;
+    --ink-mute: #6b7285;
+    --accent: #1f9d57;      /* agent-green, darkened for light ground */
+    --blue: #2f74d6;        /* ball */
+    --amber: #b9821a;       /* zone / warning */
+    --grid: rgba(23,26,34,.05);
+    --shadow: 0 1px 2px rgba(20,24,40,.06), 0 8px 30px rgba(20,24,40,.06);
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", "Menlo", "Consolas", monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0d0e13;
+      --panel: #16181f;
+      --panel-2: #1b1e27;
+      --line: #262a35;
+      --line-strong: #333846;
+      --ink: #e7e9f0;
+      --ink-soft: #b7bccb;
+      --ink-mute: #878da0;
+      --accent: #5ecd82;
+      --blue: #5ea4ff;
+      --amber: #f0be46;
+      --grid: rgba(255,255,255,.035);
+      --shadow: 0 1px 0 rgba(255,255,255,.02), 0 20px 50px rgba(0,0,0,.45);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #f3f4f8; --panel: #ffffff; --panel-2: #eef0f5; --line: #d9dce6;
+    --line-strong: #c3c8d6; --ink: #171a22; --ink-soft: #444a5a; --ink-mute: #6b7285;
+    --accent: #1f9d57; --blue: #2f74d6; --amber: #b9821a; --grid: rgba(23,26,34,.05);
+    --shadow: 0 1px 2px rgba(20,24,40,.06), 0 8px 30px rgba(20,24,40,.06);
+  }
+  :root[data-theme="dark"] {
+    --bg: #0d0e13; --panel: #16181f; --panel-2: #1b1e27; --line: #262a35;
+    --line-strong: #333846; --ink: #e7e9f0; --ink-soft: #b7bccb; --ink-mute: #878da0;
+    --accent: #5ecd82; --blue: #5ea4ff; --amber: #f0be46; --grid: rgba(255,255,255,.035);
+    --shadow: 0 1px 0 rgba(255,255,255,.02), 0 20px 50px rgba(0,0,0,.45);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 40px 40px;
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- machine voice ---------- */
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .eyebrow .tick { color: var(--accent); }
+  .eyebrow a.home { color: var(--ink-soft); text-decoration: none; border-bottom: 1px solid var(--line-strong); }
+  .eyebrow a.home:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* ---------- header ---------- */
+  header { padding: 72px 0 40px; border-bottom: 1px solid var(--line); }
+  h1 {
+    font-family: var(--sans);
+    font-weight: 760;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    font-size: clamp(30px, 6vw, 52px);
+    margin: 20px 0 0;
+    text-wrap: balance;
+  }
+  h1 .cursor {
+    display: inline-block; width: .58em; height: 1.02em;
+    background: var(--accent); transform: translateY(.12em); margin-left: .12em;
+    animation: blink 1.15s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+  .lede {
+    font-size: 18px; color: var(--ink-soft);
+    max-width: 62ch; margin: 22px 0 0;
+  }
+  .lede b { color: var(--ink); font-weight: 640; }
+  .meta {
+    margin-top: 30px; display: flex; flex-wrap: wrap; gap: 10px;
+    font-family: var(--mono); font-size: 12.5px;
+  }
+  .chip {
+    border: 1px solid var(--line-strong); border-radius: 4px;
+    padding: 5px 10px; color: var(--ink-soft); background: var(--panel);
+    display: inline-flex; gap: 8px; align-items: center;
+  }
+  .chip .k { color: var(--ink-mute); }
+  .chip .v { color: var(--ink); }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent); }
+
+  /* ---------- intro ---------- */
+  .intro { padding: 40px 0 8px; }
+  .intro p { max-width: 66ch; color: var(--ink-soft); margin: 0 0 16px; }
+  .intro p b { color: var(--ink); font-weight: 640; }
+  .intro .callout {
+    font-family: var(--mono); font-size: 13.5px; line-height: 1.7;
+    color: var(--ink-soft);
+    border-left: 2px solid var(--accent);
+    padding: 4px 0 4px 16px; margin: 22px 0 0;
+  }
+  .intro .callout b { color: var(--ink); }
+
+  /* ---------- section label ---------- */
+  .sec-label {
+    display: flex; align-items: baseline; gap: 14px;
+    margin: 56px 0 8px; padding-top: 20px;
+  }
+  .sec-label h2 {
+    font-size: 13px; font-family: var(--mono); text-transform: uppercase;
+    letter-spacing: .16em; color: var(--ink); margin: 0; font-weight: 600;
+  }
+  .sec-label .rule { flex: 1; height: 1px; background: var(--line); }
+  .sec-note { font-family: var(--mono); font-size: 12px; color: var(--ink-mute); }
+
+  /* ---------- demo entries ---------- */
+  .entry {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    padding: 22px;
+    margin-top: 22px;
+  }
+  .entry-top {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 16px;
+  }
+  .idx {
+    font-family: var(--mono); font-size: 12px; font-weight: 600;
+    color: var(--ink-mute); letter-spacing: .1em;
+  }
+  .entry-title {
+    font-family: var(--mono); font-size: 13px; color: var(--ink-soft);
+    letter-spacing: .04em;
+  }
+  .verdict {
+    margin-left: auto; font-family: var(--mono); font-size: 11.5px;
+    font-weight: 640; letter-spacing: .1em; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 4px; border: 1px solid;
+    display: inline-flex; align-items: center; gap: 7px;
+  }
+  .verdict::before { content:""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .verdict.pass { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 45%, transparent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
+  .verdict.reject { color: var(--amber); border-color: color-mix(in srgb, var(--amber) 45%, transparent); background: color-mix(in srgb, var(--amber) 10%, transparent); }
+
+  /* prompt: a REPL bar */
+  .prompt {
+    font-family: var(--mono); font-size: 15px;
+    background: var(--panel-2); border: 1px solid var(--line);
+    border-radius: 7px; padding: 12px 14px; color: var(--ink);
+    display: flex; gap: 10px; align-items: baseline; overflow-x: auto;
+  }
+  .prompt .caret { color: var(--accent); font-weight: 700; flex: none; }
+  .prompt .cmd { white-space: nowrap; }
+
+  /* viewport: framed screen for the gif */
+  .viewport {
+    margin-top: 14px;
+    border: 1px solid var(--line-strong);
+    border-radius: 8px; overflow: hidden; background: #12131a;
+    position: relative;
+  }
+  .viewport img { display: block; width: 100%; height: auto; image-rendering: auto; }
+  .telemetry {
+    display: flex; flex-wrap: wrap; gap: 6px 18px;
+    font-family: var(--mono); font-size: 12px; color: var(--ink-mute);
+    padding: 10px 14px; border-top: 1px solid var(--line);
+    background: var(--panel);
+  }
+  .telemetry b { color: var(--ink-soft); font-weight: 600; }
+  .telemetry .num { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+  /* influence note */
+  .impact { margin-top: 16px; display: flex; gap: 14px; }
+  .impact .tag {
+    flex: none; font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--ink-mute); padding-top: 3px;
+    writing-mode: horizontal-tb;
+  }
+  .impact p { margin: 0; color: var(--ink-soft); font-size: 15.5px; }
+  .impact p b { color: var(--ink); font-weight: 640; }
+  .impact code {
+    font-family: var(--mono); font-size: .86em; color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    padding: 1px 5px; border-radius: 3px;
+  }
+
+  /* ---------- funnel ---------- */
+  .funnel { display: grid; gap: 12px; margin-top: 22px; }
+  @media (min-width: 640px) { .funnel { grid-template-columns: repeat(3, 1fr); } }
+  .layer {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 9px; padding: 16px 16px 18px;
+  }
+  .layer .tier { font-family: var(--mono); font-size: 12px; color: var(--accent); letter-spacing: .1em; }
+  .layer h3 { margin: 8px 0 6px; font-size: 15px; letter-spacing: -.01em; }
+  .layer p { margin: 0; font-size: 13.5px; color: var(--ink-mute); }
+
+  /* ---------- footer ---------- */
+  footer {
+    margin-top: 64px; padding: 30px 0 60px;
+    border-top: 1px solid var(--line);
+    font-family: var(--mono); font-size: 12.5px; color: var(--ink-mute);
+    display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between;
+  }
+  footer b { color: var(--ink-soft); font-weight: 600; }
+
+  @media (prefers-reduced-motion: reduce) {
+    h1 .cursor { animation: none; }
+  }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow"><a class="home" href="../"><span class="tick">◆</span> Build log</a> · Day 01 · Infinite environment generation</div>
+    <h1>A text command becomes a world you can verify<span class="cursor"></span></h1>
+    <p class="lede">An agent harness that turns a plain-language command into a small
+      2D physics scene — then proves the scene is sound <b>entirely in code</b>, reading
+      the engine's own state instead of looking at a single rendered pixel.</p>
+    <div class="meta">
+      <span class="chip"><span class="dot"></span><span class="k">status</span><span class="v">skeleton running</span></span>
+      <span class="chip"><span class="k">tests</span><span class="v">68 passing</span></span>
+      <span class="chip"><span class="k">engine</span><span class="v">pymunk 2D</span></span>
+      <span class="chip"><span class="k">verifier</span><span class="v">code-only, no VLM</span></span>
+    </div>
+  </header>
+
+  <section class="intro">
+    <p>The loop is simple to state and hard to get right: a command comes in, an
+      environment goes out, and a <b>verifier</b> decides whether that environment is fit to
+      train on. Because the world is simulated in 2D, its truth is fully available through
+      code — every position, velocity, angle and contact — so the verifier never needs a
+      vision model guessing at frames.</p>
+    <p>These are the first three demos. Each one is driven by the real harness
+      (<code>python -m harness play</code>), and each one changed how the verifier
+      thinks. The command is shown above every clip; the machine's world plays below it.</p>
+    <p class="callout">Two voices on this page: <b>monospace is the machine</b> —
+      commands, state, verdicts — and <b>sans is us</b>, narrating what it taught us.</p>
+  </section>
+
+  <div class="sec-label">
+    <h2>Demos</h2>
+    <span class="rule"></span>
+    <span class="sec-note">command → play → verifier impact</span>
+  </div>
+
+  <!-- 01 -->
+  <article class="entry">
+    <div class="entry-top">
+      <span class="idx">01</span>
+      <span class="entry-title">push_ball_to_zone</span>
+      <span class="verdict pass">pass</span>
+    </div>
+    <div class="prompt"><span class="caret">&gt;</span><span class="cmd">push the ball into the zone</span></div>
+    <div class="viewport">
+      <img src="media/push_ball.gif" alt="A green agent walks right and shoves a blue ball into an amber goal zone." loading="lazy">
+      <div class="telemetry">
+        <span><b>result</b> <span class="num">reached goal</span></span>
+        <span><b>steps</b> <span class="num">150</span></span>
+        <span><b>policy</b> greedy · no LLM</span>
+      </div>
+    </div>
+    <div class="impact">
+      <span class="tag">Verifier impact</span>
+      <p>Getting this scene to pass taught <b>L0</b> that a goal-zone <b>sensor</b> overlapping
+        the floor is not a collision, and taught <b>L1</b> that objects must rest exactly on the
+        ground surface <code>y = 1</code> — spawn one a few pixels high and the settling check
+        rightly flags it as unstable.</p>
+    </div>
+  </article>
+
+  <!-- 02 -->
+  <article class="entry">
+    <div class="entry-top">
+      <span class="idx">02</span>
+      <span class="entry-title">climb_platforms</span>
+      <span class="verdict pass">pass</span>
+    </div>
+    <div class="prompt"><span class="caret">&gt;</span><span class="cmd">climb the platforms to the zone</span></div>
+    <div class="viewport">
+      <img src="media/climb.gif" alt="A green agent bumps and jumps up a grey staircase to reach an amber zone at the top." loading="lazy">
+      <div class="telemetry">
+        <span><b>result</b> <span class="num">reached goal</span></span>
+        <span><b>steps</b> <span class="num">222</span></span>
+        <span><b>policy</b> greedy · no LLM</span>
+      </div>
+    </div>
+    <div class="impact">
+      <span class="tag">Verifier impact</span>
+      <p>Building a staircase the agent could <i>actually</i> climb exposed the gap between
+        <b>coherent</b> and <b>solvable</b>: a scene can pass every physical check and still be
+        unwinnable. That gap is exactly what the next layer — <b>L3, solvability</b> — is being
+        built to close.</p>
+    </div>
+  </article>
+
+  <!-- 03 -->
+  <article class="entry">
+    <div class="entry-top">
+      <span class="idx">03</span>
+      <span class="entry-title">broken_floating</span>
+      <span class="verdict reject">reject</span>
+    </div>
+    <div class="prompt"><span class="caret">&gt;</span><span class="cmd">a box floating in mid-air with no support</span></div>
+    <div class="viewport">
+      <img src="media/broken.gif" alt="A blue box floats in mid-air, then falls to the ground under gravity — the verifier rejects it." loading="lazy">
+      <div class="telemetry">
+        <span><b>rejected at</b> <span class="num">L1 · no_displacement</span></span>
+        <span><b>drift</b> <span class="num">429 px</span></span>
+        <span><b>class</b> ENV_ERROR</span>
+      </div>
+    </div>
+    <div class="impact">
+      <span class="tag">Verifier impact</span>
+      <p>Our canonical <b>negative fixture</b>. The box has no support, collapses under gravity,
+        and <b>L1</b>'s settling rollout catches the <code>429 px</code> drift — proof that the
+        verifier judges what the world <i>does</i>, not what the code that built it claims.</p>
+    </div>
+  </article>
+
+  <div class="sec-label">
+    <h2>How a scene is checked</h2>
+    <span class="rule"></span>
+    <span class="sec-note">funnel · stops at first failure</span>
+  </div>
+
+  <div class="funnel">
+    <div class="layer">
+      <div class="tier">L0 · static</div>
+      <h3>Does it build?</h3>
+      <p>Sandbox-clean, agent present, nothing out of bounds, no initial interpenetration.</p>
+    </div>
+    <div class="layer">
+      <div class="tier">L1 · settling</div>
+      <h3>Does it hold?</h3>
+      <p>Run it under gravity with no input; reject NaNs, drift, and objects that never rest.</p>
+    </div>
+    <div class="layer">
+      <div class="tier">L2 · goal</div>
+      <h3>Is the goal real?</h3>
+      <p>Success must be a pure predicate that isn't already true before the agent does anything.</p>
+    </div>
+  </div>
+
+  <footer>
+    <span><b>General Intuition</b> — infinite environment generation challenge</span>
+    <span>code-only verification · <b>L3 / L4</b> next</span>
+  </footer>
+</div>
