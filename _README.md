@@ -9,10 +9,11 @@ index.html              the portfolio (home page)
 404.html                not-found page
 favicon.svg, favicon-32.png, apple-touch-icon.png
 assets/site.css         all styles
-assets/wave.js          the slow trace of characters under the header (the only script)
+assets/wave.js          the slow trace of characters under the header
+assets/focus.js         makes section labels open one section and fold the others
 assets/og.png           preview image for shared links
 assets/fonts/           IBM Plex Mono (SIL Open Font License, see OFL.txt)
-assets/img/             figures for the research entries (720 px webp)
+assets/img/             pictures for the research entries (320 px webp)
 
 blog/game-harness/            write-up of the game harness (generated elsewhere, committed as built)
 blog/game-harness/build-log/  its password-gated build log: landing page plus day1/ ... day5/
