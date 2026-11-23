@@ -1,6 +1,6 @@
 /* Two colours only: black and white. Hierarchy comes from weight, size,
    inverse video, boxes and rules, never from grey. Photographs keep their
-   own colours. */
+   own colours. A filled white block is reserved for the name and the venues. */
 
 @font-face {
   font-family: "Plex Mono";
@@ -148,6 +148,7 @@ h1 {
   align-items: center;
   justify-content: center;
   gap: 0.3rem;
+  padding-inline: 0.5rem;
   text-align: center;
 }
 
@@ -186,7 +187,7 @@ h1 {
   gap: 1px;
 }
 
-.stack > .cell:last-child {
+.stack > :last-child {
   flex: 1;
 }
 
@@ -197,6 +198,7 @@ h2 {
   display: inline-block;
   margin-bottom: 0.6rem;
   border: 1px solid var(--white);
+  scroll-margin-top: 0.5rem;
 }
 
 h2:not(:has(button)) {
@@ -213,10 +215,15 @@ h2 button {
   cursor: pointer;
 }
 
-h2 button:hover,
-.is-open > h2 button {
-  background: var(--white);
-  color: var(--black);
+@media (hover: hover) {
+  h2 button:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+}
+
+.is-open > h2 {
+  border: 3px double var(--white);
 }
 
 /* Items inside a section are separated by a dashed rule. */
@@ -271,10 +278,12 @@ h2 button:hover,
 }
 
 .links a::before {
+  content: "[";
   content: "[" / "";
 }
 
 .links a::after {
+  content: "]";
   content: "]" / "";
 }
 
@@ -311,75 +320,104 @@ h2 button:hover,
   padding-left: 1ch;
 }
 
-/* One section open: every section becomes a direct child of the body. The
-   folded ones shrink to their labels in a row; the open one takes the full
-   width below them, with its items side by side and slightly larger type. */
+/* One section open (screens only; paper always gets the full overview).
+   assets/focus.js moves the open section to the end of the body. Every
+   section becomes a direct child of the body: the folded ones shrink to
+   their labels in a row of equal cells, the open one takes the full width
+   below them, with its items side by side and slightly larger type. */
 
-[data-focus] .cols {
-  display: flex;
-  flex-wrap: wrap;
+@media screen {
+  .frame[data-focus] .cols {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .frame[data-focus] .stack {
+    display: contents;
+  }
+
+  .frame[data-focus] [data-section] {
+    flex: 1 1 calc(50% - 1px);
+    padding-block: 0.6rem;
+  }
+
+  .frame[data-focus] [data-section] h2 {
+    margin-bottom: 0;
+  }
+
+  .frame[data-focus] [data-section]:not(.is-open) .items {
+    display: none;
+  }
+
+  .frame[data-focus] [data-section].is-open {
+    flex: 1 1 100%;
+    padding-block: 0.9rem 1.2rem;
+    font-size: 0.9375rem;
+  }
+
+  .frame[data-focus] [data-section].is-open h2 {
+    margin-bottom: 0.9rem;
+  }
+
+  .frame[data-focus] .is-open .items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+    gap: 1.25rem 4ch;
+  }
+
+  .frame[data-focus] #skills .items {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr));
+  }
+
+  /* Sections with one or two short entries stay compact on the left. */
+
+  .frame[data-focus] #education .items,
+  .frame[data-focus] #open-source .items,
+  .frame[data-focus] #outside-work .items {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 32rem));
+    justify-content: start;
+  }
+
+  .frame[data-focus] .is-open .items > * {
+    max-width: 68ch;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .frame[data-focus] .is-open .strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    max-width: 30rem;
+  }
+
+  .frame[data-focus] .is-open .strip figcaption {
+    grid-column: 1 / -1;
+    padding-left: 0;
+  }
+
+  @media (min-width: 44.0625rem) {
+    .frame[data-focus] [data-section]:not(.is-open) {
+      flex-basis: calc(33.333% - 1px);
+    }
+  }
+
+  @media (min-width: 62rem) {
+    .frame[data-focus] [data-section]:not(.is-open) {
+      flex-basis: calc(20% - 1px);
+    }
+  }
 }
 
-[data-focus] .stack {
-  display: contents;
-}
-
-.frame[data-focus] [data-section] {
-  flex: 1 1 auto;
-  padding-block: 0.6rem;
-}
-
-[data-focus] [data-section] h2 {
-  margin-bottom: 0;
-}
-
-[data-focus] [data-section]:not(.is-open) .items {
-  display: none;
-}
-
-.frame[data-focus] [data-section].is-open {
-  order: 1;
-  flex: 1 1 100%;
-  padding-block: 0.9rem 1.2rem;
-  font-size: 0.9375rem;
-}
-
-[data-focus] .is-open h2 {
-  margin-bottom: 0.9rem;
-}
-
-[data-focus] .is-open .items {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
-  gap: 1.25rem 4ch;
-}
-
-[data-focus] .is-open .items > * {
-  max-width: 68ch;
-  margin-top: 0;
-  padding-top: 0;
-  border-top: 0;
-}
-
-[data-focus] .is-open .strip {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  max-width: 30rem;
-}
-
-[data-focus] .is-open .strip figcaption {
-  grid-column: 1 / -1;
-  padding-left: 0;
-}
-
-/* Two columns on mid-sized screens: the first block beside the other two. */
+/* Mid-sized screens: research runs across the top with its papers side by
+   side; the other two columns sit below it. */
 
 @media (max-width: 75rem) {
   .cols {
-    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 
   .cols > :first-child {
-    grid-row: 1 / span 2;
+    grid-column: 1 / -1;
   }
 
   .top {
@@ -387,12 +425,24 @@ h2 button:hover,
   }
 }
 
-@media (max-width: 62rem) {
-  .strip {
-    grid-template-columns: repeat(3, 6rem);
+@media (min-width: 62.0625rem) and (max-width: 75rem) {
+  .frame:not([data-focus]) .cols > :first-child .items {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0 4ch;
   }
 
-  .strip figcaption {
+  .frame:not([data-focus]) .cols > :first-child .item {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .frame:not([data-focus]) .strip {
+    grid-template-columns: repeat(3, minmax(0, 6rem));
+  }
+
+  .frame:not([data-focus]) .strip figcaption {
     grid-column: 1 / -1;
     padding-left: 0;
   }
@@ -417,10 +467,6 @@ h2 button:hover,
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .cols > :first-child {
-    grid-row: auto;
-  }
-
   .contacts {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -429,11 +475,21 @@ h2 button:hover,
     flex-direction: row;
     justify-content: flex-start;
     gap: 2ch;
-    padding-block: 0.5rem;
+    padding: 0.5rem var(--pad);
+    text-align: left;
+  }
+
+  .contacts span {
+    flex: 0 0 9ch;
   }
 
   .strip {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .strip figcaption {
+    grid-column: 1 / -1;
+    padding-left: 0;
   }
 }
 
@@ -447,11 +503,11 @@ h2 button:hover,
   }
 
   h2 button {
-    padding-block: 0.35rem;
+    padding-block: 0.6rem;
   }
 }
 
-/* On paper: black on white, same grid. */
+/* On paper: black on white, same grid, everything unfolded. */
 
 @media print {
   :root {
@@ -464,7 +520,12 @@ h2 button:hover,
     padding: 0;
   }
 
-  .wave {
+  .wave,
+  h2 button span {
     display: none;
+  }
+
+  .is-open > h2 {
+    border: 1px solid var(--white);
   }
 }

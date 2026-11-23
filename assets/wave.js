@@ -19,7 +19,7 @@
     probe.textContent = "0".repeat(40);
     pre.textContent = "";
     pre.append(probe);
-    const characterWidth = probe.getBoundingClientRect().width / 40;
+    const characterWidth = probe.getBoundingClientRect().width / 40 || 8;
     probe.remove();
     columns = Math.max(1, Math.floor(pre.clientWidth / characterWidth));
   }
@@ -67,4 +67,12 @@
 
   restart();
   if (!calm.matches) requestAnimationFrame(tick);
+
+  // Characters change width when the web font arrives: count them again.
+  if (document.fonts) {
+    document.fonts.ready.then(() => {
+      knownWidth = 0;
+      restart();
+    });
+  }
 })();
