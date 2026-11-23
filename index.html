@@ -20,148 +20,130 @@
   <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="preload" href="assets/fonts/plex-mono-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/plex-mono-600.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
 
 <div class="frame">
 
-  <header class="cell head">
-    <div>
+  <header class="cols">
+    <div class="cell">
       <h1>Elias Naha</h1>
       <p>
         Machine learning researcher working on representation learning for
-        brain signals and images. Research scientist intern at reaDream,
-        working toward decoding dream content from sleep EEG. Master's in
-        Data Science from EPFL, with my thesis at the MIT Media Lab.
+        brain signals and images. Research scientist intern at reaDream.
+        Master's in Data Science from EPFL, with my thesis at the MIT Media
+        Lab.
       </p>
     </div>
-    <nav aria-label="Contact">
-      <ul class="plain">
-        <li><a href="mailto:enaha@mit.edu">enaha@mit.edu</a></li>
-        <li><a href="https://github.com/eliasnaha">github.com/eliasnaha</a></li>
-        <li><a href="https://www.linkedin.com/in/elias-naha-607334198/">linkedin.com/in/elias-naha</a></li>
-      </ul>
-    </nav>
-    <p class="aside">Strasbourg, France<br>updated 2026/11</p>
+    <ul class="cell plain" aria-label="Contact">
+      <li><a href="mailto:enaha@mit.edu">enaha@mit.edu</a></li>
+      <li><a href="https://github.com/eliasnaha">github.com/eliasnaha</a></li>
+      <li><a href="https://www.linkedin.com/in/elias-naha-607334198/">linkedin.com/in/elias-naha</a></li>
+    </ul>
+    <p class="cell">Strasbourg, France<br>updated 2026/11</p>
   </header>
+
+  <div class="cell wave" aria-hidden="true">
+<pre data-wave>
+              .--.                                 .-'-.                             .--.
+ .--.      .-'    '-.        .-.      .--.      .-'     '-.       .-.      .-.    .-'    '-.      .--.
+'    '-..-'          '-.  .-'   '-..-'    '-..-'           '-. .-'   '-..-'   '--'          '-..-'    '-
+</pre>
+  </div>
 
   <main class="cols">
 
-  <div class="stack">
+    <div class="stack">
 
-    <section class="cell" aria-labelledby="research">
-      <h2 id="research">research</h2>
+      <section class="cell" aria-labelledby="research">
+        <h2 id="research">research</h2>
 
-      <article class="item">
-        <h3>Hierarchical representations for brain modeling</h3>
-        <p>Women in Machine Learning Workshop, NeurIPS 2026</p>
-        <p>
-          I designed an EEG encoder that compresses a recording in stages and
-          keeps a separate readout at each one: fine spatial and temporal
-          patterns in the early stages, global semantics in the deeper ones.
-        </p>
-        <figure class="pyramid">
-          <div class="levels" role="img" aria-label="Three grids of characters. The first is 8 rows by 48 columns and finely textured; the second, 4 by 12, shows the same pattern in coarser blocks; the third is 2 by 3.">
-            <div class="level">
-<pre aria-hidden="true">
-..:.:----=++++=-=--:-+=-=+*%%%##%@@@%*++==-:-::-
-  . :.:--===**+#+**++**+++*#%#+=*#%%#*+===--:.::
-.    .::=-++*###**#*#*++=-*#%#-:=#@@%#*+=-:.:. .
-::::-::---+=*###%%%%%%#+--=*#+:.-+##*+==+=--. .
-=-::--:--=+++#%%#%%%#%%#=-+**+- :++++===++=-:.:.
-**++=--=====+#**#%@@@#%#**=+++:.:-=----==----::-
-**+*+*+=++=++***###**#%##++==-:. ..:...:====+===
-*#**#%#*#+++=++=**#####*###++-.:::.. .:..-==+*=+
+        <article class="item">
+          <p class="venue">WiML @ NeurIPS 2026</p>
+          <h3>Hierarchical representations for brain modeling</h3>
+          <p>
+            I designed an EEG encoder that compresses a recording stage by
+            stage and keeps a separate readout at every stage.
+          </p>
+          <figure class="ascii" style="--cols: 52">
+<pre role="img" aria-label="Diagram. An EEG recording enters a chain of encoder stages, from shallow to deep. Each stage has its own readout: fine spatial and temporal patterns at the shallow end, global semantics at the deep end.">
+ EEG     +---------+     +---------+     +---------+
+ ------> | shallow | --> |   ...   | --> |  deep   |
+         +---------+     +---------+     +---------+
+              |               |               |
+              v               v               v
+           readout         readout         readout
+         fine spatial                       global
+         and temporal                      semantics
+           patterns
 </pre>
-              <span>input: 8 channels x 48 samples</span>
-            </div>
-            <div class="level-pair">
-            <div class="level">
-<pre aria-hidden="true">
-.:=+=+*#%*-:
-.:=##*==**-.
-=-=*%%+--==:
-**++##*-..=+
-</pre>
-              <span>stage 1: 4 x 12</span>
-            </div>
-            <div class="level">
-<pre aria-hidden="true">
--+=
-+*-
-</pre>
-              <span>stage 2: 2 x 3</span>
-            </div>
-            </div>
-          </div>
-          <figcaption>
-            A synthetic EEG patch drawn in characters, then averaged twice
-            over 2 channels and 4 samples. The encoder reads out at each scale.
-          </figcaption>
-        </figure>
-      </article>
+          </figure>
+        </article>
 
-      <article class="item">
-        <h3>Context-aware semantic segmentation via stage-wise attention</h3>
-        <p>
-          A. Carreaud, E. Naha, A. Chansel, N. Lahellec, J. Skaloud,
-          A. Gressin. CVPR 2026
-        </p>
-        <p>
-          CASWiT is a memory-efficient transformer for ultra-high-resolution
-          images. One branch sees a downsampled view of the surrounding area
-          and passes that context, stage by stage, to a second branch that
-          works on high-resolution patches. With self-supervised pretraining
-          it reaches state of the art on four large benchmarks across
-          satellite and medical imagery: FLAIR-HUB, URUR, ISIC and CRAIG.
-        </p>
-        <figure class="strip">
-          <img src="assets/img/uhr-1.webp" width="720" height="720" loading="lazy" alt="Aerial photograph of farmland with a few houses along a road.">
-          <img src="assets/img/uhr-2.webp" width="720" height="720" loading="lazy" alt="Close-up of the same scene: two houses, a road and a ploughed field.">
-          <img src="assets/img/uhr-3.webp" width="720" height="720" loading="lazy" alt="The close-up colored by predicted land-cover class: buildings, road, vegetation and field.">
-          <figcaption>
-            An aerial tile, a detail of it, and the predicted land cover.
-            <span class="links">
-              [<a href="https://arxiv.org/abs/2601.11310">paper on arXiv</a>]
-              [<a href="https://huggingface.co/collections/heig-vd-geo/caswit">code on Hugging Face</a>]
-            </span>
-          </figcaption>
-        </figure>
-      </article>
+        <article class="item">
+          <p class="venue">CVPR 2026</p>
+          <h3>Context-aware semantic segmentation via stage-wise attention</h3>
+          <p>A. Carreaud, E. Naha, A. Chansel, N. Lahellec, J. Skaloud, A. Gressin</p>
+          <p>
+            CASWiT is a memory-efficient transformer for ultra-high-resolution
+            segmentation. One branch sees a downsampled view of the
+            surrounding area and injects that context, through staged
+            cross-scale attention, into a second branch that works on
+            high-resolution patches. With self-supervised pretraining it
+            reaches state of the art on four large benchmarks across satellite
+            and medical imagery: FLAIR-HUB, URUR, ISIC and CRAG.
+          </p>
+          <figure class="strip">
+            <img src="assets/img/uhr-1.webp" width="320" height="320" loading="lazy" alt="Aerial photograph of farmland with a few houses along a road.">
+            <img src="assets/img/uhr-2.webp" width="320" height="320" loading="lazy" alt="Close-up of the same scene: two houses, a road and a plowed field.">
+            <img src="assets/img/uhr-3.webp" width="320" height="320" loading="lazy" alt="The close-up colored by predicted land-cover class: buildings, road, vegetation and field.">
+            <figcaption>
+              Left to right: an aerial tile, a detail of it, the predicted
+              land cover.
+              <span class="links">
+                <a href="https://arxiv.org/abs/2601.11310">paper on arXiv</a>
+                <a href="https://huggingface.co/collections/heig-vd-geo/caswit">code on Hugging Face</a>
+              </span>
+            </figcaption>
+          </figure>
+        </article>
 
-      <article class="item">
-        <h3>Anatomically-guided vision transformer for interpretable glaucoma screening</h3>
-        <p>ARVO 2026</p>
-        <p>
-          A vision transformer that screens fundus photographs for glaucoma,
-          with anatomical priors taken from optic disc and retinal vessel
-          segmentation. Its attention concentrates on the optic disc and the
-          vessels around it. I built the full machine learning pipeline as
-          the only engineer on a clinical team.
-        </p>
-        <figure class="strip strip-round">
-          <img src="assets/img/glaucoma-1.webp" width="720" height="720" loading="lazy" alt="Color photograph of a retina, with the optic disc and blood vessels visible.">
-          <img src="assets/img/glaucoma-2.webp" width="720" height="720" loading="lazy" alt="A retina image processed so that the vessels and optic disc stand out.">
-          <img src="assets/img/glaucoma-3.webp" width="720" height="720" loading="lazy" alt="The processed retina with a heat map concentrated on the optic disc.">
-          <figcaption>
-            A fundus photograph, an enhanced view of the vessels, and where
-            the model looks.
-          </figcaption>
-        </figure>
-      </article>
-    </section>
+        <article class="item">
+          <p class="venue">ARVO 2026</p>
+          <h3>Anatomically-guided vision transformer for interpretable glaucoma screening</h3>
+          <p>
+            A vision transformer that screens fundus photographs for glaucoma,
+            with anatomical priors taken from optic disc and retinal vessel
+            segmentation. Its attention concentrates on the optic disc and the
+            vessels around it. I led the full machine learning pipeline as the
+            sole engineer in an otherwise clinical team.
+          </p>
+          <figure class="strip strip-round">
+            <img src="assets/img/glaucoma-1.webp" width="320" height="320" loading="lazy" alt="Color photograph of a retina, with the optic disc and blood vessels visible.">
+            <img src="assets/img/glaucoma-2.webp" width="320" height="320" loading="lazy" alt="A retina image processed so that the vessels and optic disc stand out.">
+            <img src="assets/img/glaucoma-3.webp" width="320" height="320" loading="lazy" alt="The processed retina with a heat map concentrated on the optic disc.">
+            <figcaption>
+              Left to right: a fundus photograph, an enhanced view of the
+              vessels, where the model looks.
+              <span class="links">
+                <a href="https://iovs.arvojournals.org/article.aspx?articleid=2812067">abstract in IOVS</a>
+              </span>
+            </figcaption>
+          </figure>
+        </article>
+      </section>
 
-  </div>
+    </div>
 
-  <div class="stack">
+    <div class="stack">
 
-    <section class="cell" aria-labelledby="experience">
-      <h2 id="experience">experience</h2>
+      <section class="cell" aria-labelledby="experience">
+        <h2 id="experience">experience</h2>
 
-      <article class="item">
-        <p class="when">2026/09 - now</p>
-        <div>
+        <article class="item">
+          <p>2026/09 - now</p>
           <h3>reaDream, research scientist intern</h3>
           <p>
             I train contrastive models that align REM-sleep EEG with waking
@@ -170,119 +152,149 @@
             high-frequency EEG as encoder input, to capture the fine visual
             detail the two states share.
           </p>
-        </div>
-      </article>
+        </article>
 
-      <article class="item">
-        <p class="when">2025/08 - 2026/02</p>
-        <div>
+        <article class="item">
+          <p>2025/08 - 2026/02</p>
           <h3>LegalPass, AI engineer</h3>
           <p>
-            I shipped full-stack features in weekly production sprints
-            through a launch that reached more than 100 clients, and built an
-            LLM contract-review system that flags predatory clauses, with a
-            rollback mechanism for human validation, refined daily with
-            in-house lawyers to fit client needs and Swiss legal requirements.
+            I shipped full-stack features (front-end, back-end, databases) in
+            weekly production sprints and met every deadline of a launch that
+            reached 100+ clients. I also built an LLM contract-review system
+            that flags predatory clauses, with a rollback mechanism for human
+            validation. I refined it daily with in-house lawyers to fit client
+            needs and Swiss legal requirements.
           </p>
-        </div>
-      </article>
+        </article>
 
-      <article class="item">
-        <p class="when">2024/01 - 2025/06</p>
-        <div>
-          <h3>VITA lab, EPFL, teaching assistant</h3>
+        <article class="item">
+          <p>2024/01 - 2025/06</p>
+          <h3>EPFL VITA lab, teaching assistant</h3>
           <p>
-            Deep Learning for Autonomous Vehicles. I taught multi-modal
-            architectures, transformers and attention to 40 master's students
-            in weekly coding sessions, and supervised capstone projects on
-            autonomous driving models.
+            Course: Deep Learning for Autonomous Vehicles. I taught
+            multi-modal architectures, transformers and attention to 40
+            master's students in weekly coding sessions, and supervised
+            capstone projects on autonomous driving models.
           </p>
-        </div>
-      </article>
-    </section>
+        </article>
+      </section>
 
-    <section class="cell" aria-labelledby="education">
-      <h2 id="education">education</h2>
+      <section class="cell" aria-labelledby="education">
+        <h2 id="education">education</h2>
 
-      <article class="entry">
-        <p class="when">2023/09 - 2026/10</p>
-        <div>
+        <article class="item">
+          <p>2023/09 - 2026/10</p>
           <h3>EPFL, Master's in Data Science</h3>
-        </div>
-      </article>
+          <p>
+            Lausanne. Alongside the courses: teaching assistant at the VITA
+            lab, the CASWiT paper with the ESO lab, and the glaucoma study
+            with a clinical team.
+          </p>
+        </article>
 
-      <article class="entry">
-        <p class="when">2026/02 - 2026/10</p>
-        <div>
+        <article class="item">
+          <p>2026/02 - 2026/10</p>
           <h3>MIT, Master's thesis</h3>
-          <p>Fluid Interfaces group, Media Lab. Grade 6/6.</p>
-        </div>
-      </article>
-    </section>
+          <p>
+            Fluid Interfaces Group, Media Lab, Cambridge. Grade 6/6. The EEG
+            encoder work shown at WiML dates from these months.
+          </p>
+        </article>
 
-  </div>
+        <figure class="item ascii" style="--cols: 55">
+<pre role="img" aria-label="Timeline, 2023 to 2026. EPFL Master's: September 2023 to October 2026. VITA lab teaching assistant: January 2024 to June 2025. LegalPass: August 2025 to February 2026. MIT thesis: February to October 2026. reaDream: since September 2026.">
+             2023 2024         2025         2026
+             SOND JFMAMJJASOND JFMAMJJASOND JFMAMJJASON
+EPFL MSc     #########################################
+VITA lab TA       ###################
+LegalPass                             ########
+MIT thesis                                   #########
+reaDream                                            ###
+</pre>
+        </figure>
+      </section>
 
-  <div class="stack">
+    </div>
 
-    <section class="cell" aria-labelledby="open-source">
-      <h2 id="open-source">open source</h2>
+    <div class="stack">
 
-      <article>
-        <h3>A harness that proves generated games are playable</h3>
-        <p>
-          It turns a text prompt into a Godot game, then certifies the game
-          by finding a winning play and replaying it. In six days it
-          certified 169 games.
-          <span class="links">
-            [<a href="blog/game-harness/">harness write-up</a>]
-            [<a href="https://github.com/eliasnaha/gi-harness">harness code on GitHub</a>]
-          </span>
-        </p>
-      </article>
-    </section>
+      <section class="cell" aria-labelledby="open-source">
+        <h2 id="open-source">open source</h2>
 
-    <section class="cell" aria-labelledby="skills">
-      <h2 id="skills">skills</h2>
+        <article>
+          <h3>gi-harness: from a text prompt to a playable game</h3>
+          <p>
+            An LLM writes a Godot game from one text prompt. Generated code
+            can look right and still be broken, so the harness plays every
+            game and accepts it only once it has found a real win and
+            replayed it.
+          </p>
+          <p class="links">
+            <a href="blog/game-harness/">harness write-up</a>
+            <a href="https://github.com/eliasnaha/gi-harness">harness code on GitHub</a>
+          </p>
+        </article>
+      </section>
 
-      <dl class="pairs">
-        <div class="entry">
-          <dt>learning</dt>
-          <dd>contrastive learning, self-supervised pretraining, autoregressive image generation</dd>
-        </div>
-        <div class="entry">
-          <dt>vision</dt>
-          <dd>vision transformers, semantic segmentation, medical and satellite imagery</dd>
-        </div>
-        <div class="entry">
-          <dt>training</dt>
-          <dd>PyTorch, HuggingFace, multi-GPU DDP on SLURM clusters, Triton kernels</dd>
-        </div>
-        <div class="entry">
-          <dt>code</dt>
-          <dd>Python, Java, C, Scala, TypeScript, React, PostgreSQL, NumPy, Polars</dd>
-        </div>
-        <div class="entry">
-          <dt>languages</dt>
-          <dd>French (native), English (C2), German (B1)</dd>
-        </div>
-      </dl>
-    </section>
+      <section class="cell" aria-labelledby="skills">
+        <h2 id="skills">skills</h2>
 
-    <section class="cell" aria-labelledby="outside">
-      <h2 id="outside">outside work</h2>
-      <p>
-        Football for eleven years as a center-back at the pre-national level:
-        three Alsace championships, then the Swiss university Student Games
-        with EPFL. In games, ranked first in the world on Vel'Koz in League
-        of Legends, and a skill rating of 4850 in Overwatch.
-      </p>
-    </section>
+        <dl>
+          <div class="entry">
+            <dt>representation learning</dt>
+            <dd>contrastive learning, self-supervised pretraining, autoregressive image generation</dd>
+          </div>
+          <div class="entry">
+            <dt>computer vision</dt>
+            <dd>vision transformers, semantic segmentation, medical imaging, satellite imagery</dd>
+          </div>
+          <div class="entry">
+            <dt>frameworks</dt>
+            <dd>PyTorch, HuggingFace, Keras, NumPy, Polars</dd>
+          </div>
+          <div class="entry">
+            <dt>infrastructure</dt>
+            <dd>SLURM, HPC clusters, multi-GPU distributed training (PyTorch DDP), Triton kernels</dd>
+          </div>
+          <div class="entry">
+            <dt>programming</dt>
+            <dd>Python, Java, C, Scala, TypeScript, React, PostgreSQL</dd>
+          </div>
+          <div class="entry">
+            <dt>languages</dt>
+            <dd>French (native), English (C2), German (B1)</dd>
+          </div>
+        </dl>
+      </section>
 
-  </div>
+      <section class="cell" aria-labelledby="outside">
+        <h2 id="outside">outside work</h2>
+
+        <dl>
+          <div class="entry">
+            <dt>football</dt>
+            <dd>
+              Eleven years as a center-back at the pre-national level. Three
+              Alsace championships. Won the Student Games, the Swiss
+              university tournament, with EPFL.
+            </dd>
+          </div>
+          <div class="entry">
+            <dt>e-sport</dt>
+            <dd>
+              League of Legends: world #1 on Vel'Koz, Grandmaster. Overwatch:
+              4850 SR, top 0.0024%.
+            </dd>
+          </div>
+        </dl>
+      </section>
+
+    </div>
 
   </main>
 
 </div>
 
+<script src="assets/wave.js" defer></script>
 </body>
 </html>

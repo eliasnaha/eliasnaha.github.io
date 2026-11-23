@@ -9,6 +9,7 @@ index.html              the portfolio (home page)
 404.html                not-found page
 favicon.svg, favicon-32.png, apple-touch-icon.png
 assets/site.css         all styles
+assets/wave.js          the slow trace of characters under the header (the only script)
 assets/og.png           preview image for shared links
 assets/fonts/           IBM Plex Mono (SIL Open Font License, see OFL.txt)
 assets/img/             figures for the research entries (720 px webp)

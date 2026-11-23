@@ -1,5 +1,5 @@
 /* Two colours only: black and white. Hierarchy comes from weight, inverse
-   video and rules, never from grey. Photographs keep their own colours. */
+   video, boxes and rules, never from grey. Photographs keep their own colours. */
 
 @font-face {
   font-family: "Plex Mono";
@@ -20,6 +20,7 @@
 :root {
   --black: #000;
   --white: #fff;
+  --pad: 1rem;
   color-scheme: dark;
 }
 
@@ -40,7 +41,7 @@ body {
   color: var(--white);
   font-family: "Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   font-size: 0.8125rem;
-  line-height: 1.5;
+  line-height: 1.45;
 }
 
 h1,
@@ -61,6 +62,11 @@ h3,
 dt {
   font-size: inherit;
   font-weight: 600;
+}
+
+p,
+dd {
+  text-wrap: pretty;
 }
 
 ::selection {
@@ -86,10 +92,12 @@ a:focus-visible {
 }
 
 /* The frame is a white sheet showing through 1px gaps between black cells:
-   that is what draws the grid lines. */
+   that is what draws the grid lines. The header and the body share the same
+   three columns, so their rules line up. */
 
 .frame {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1px;
   max-width: 88rem;
   margin: 0 auto;
@@ -99,7 +107,7 @@ a:focus-visible {
 
 .cols {
   display: grid;
-  grid-template-columns: minmax(0, 6fr) minmax(0, 3.4fr) minmax(0, 2.6fr);
+  grid-template-columns: minmax(0, 5.4fr) minmax(0, 3.6fr) minmax(0, 3fr);
   gap: 1px;
 }
 
@@ -110,7 +118,7 @@ a:focus-visible {
 }
 
 .cell {
-  padding: 0.9rem 1.1rem 1.05rem;
+  padding: 0.75rem var(--pad) 0.85rem;
   background: var(--black);
 }
 
@@ -118,21 +126,11 @@ a:focus-visible {
   flex: 1;
 }
 
-/* Who, how to reach me, where. */
-
-.head {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  gap: 0.6rem 5ch;
-}
-
-.head div p {
-  max-width: 86ch;
-  margin-top: 0.3rem;
+h1 + p {
+  margin-top: 0.25rem;
 }
 
 .plain {
-  padding: 0;
   list-style: none;
 }
 
@@ -140,72 +138,106 @@ a:focus-visible {
 
 h2 {
   display: inline-block;
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.55rem;
   padding: 0 0.75ch;
   background: var(--white);
   color: var(--black);
 }
 
+/* Items inside a section are separated by a dashed rule. */
+
 .item + .item {
-  margin-top: 0.8rem;
-  padding-top: 0.8rem;
+  margin-top: 0.7rem;
+  padding-top: 0.7rem;
   border-top: 1px dashed var(--white);
 }
 
+.item h3 + p,
 .item p + p {
-  margin-top: 0.35rem;
+  margin-top: 0.2rem;
 }
 
 .entry + .entry {
-  margin-top: 0.55rem;
+  margin-top: 0.5rem;
 }
+
+/* Where a paper appeared: a boxed label above its title. */
+
+.venue {
+  display: inline-block;
+  margin-bottom: 0.3rem;
+  padding: 0 0.75ch;
+  border: 1px solid var(--white);
+  font-weight: 600;
+}
+
+.venue + h3 {
+  display: block;
+}
+
+/* Action links are drawn as [bracketed] words and never break in the middle. */
 
 .links {
-  display: block;
-  margin-top: 0.3rem;
-}
-
-/* The thesis figure: three grids of characters, each smaller than the last. */
-
-.pyramid {
-  margin-top: 0.7rem;
-}
-
-.levels {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-start;
-  gap: 0.75rem 3ch;
-}
-
-.level pre {
-  font: inherit;
-  line-height: 1.2;
-}
-
-.level-pair {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
-
-.level span {
-  display: block;
+  gap: 0 1.5ch;
   margin-top: 0.3rem;
 }
 
-.pyramid figcaption {
-  margin-top: 0.5rem;
+.links a {
+  white-space: nowrap;
+}
+
+.links a::before,
+.links a::after {
+  display: inline-block;
+}
+
+.links a::before {
+  content: "[" / "";
+}
+
+.links a::after {
+  content: "]" / "";
+}
+
+/* Drawings made of characters. Each one says how many columns wide it is
+   (--cols); where its cell is narrower than that, the type shrinks just
+   enough for every line to fit. A Plex Mono character is 0.6em wide. */
+
+.ascii {
+  container-type: inline-size;
+  margin-top: 0.6rem;
+  overflow: hidden;
+}
+
+.ascii pre {
+  font: inherit;
+  font-size: min(1em, calc(100cqw / (var(--cols) * 0.6)));
+  line-height: 1.25;
+}
+
+/* The strip under the header: a slow trace drawn by assets/wave.js. */
+
+.wave {
+  padding-block: 0.45rem;
+}
+
+.wave pre {
+  height: 3.45em;
+  overflow: hidden;
+  font: inherit;
+  line-height: 1.15;
 }
 
 /* Photographs, in their own colours. */
 
 .strip {
   display: grid;
-  grid-template-columns: repeat(3, 7rem) minmax(0, 1fr);
+  grid-template-columns: repeat(3, 6rem) minmax(0, 1fr);
   gap: 0.5rem;
   align-items: end;
-  margin-top: 0.7rem;
+  margin-top: 0.6rem;
 }
 
 .strip img {
@@ -226,67 +258,73 @@ h2 {
   padding-left: 1ch;
 }
 
-/* Two columns on mid-sized screens: research beside everything else. */
+/* Two columns on mid-sized screens: the first block beside the other two. */
 
 @media (max-width: 75rem) {
   .cols {
     grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
   }
 
-  .cols > .stack:first-child {
+  .cols > :first-child {
     grid-row: 1 / span 2;
   }
-
-  .cols > .stack:not(:last-child) > .cell:last-child {
-    flex: 0 1 auto;
-  }
-
-  .cols > .stack:first-child > .cell:last-child {
-    flex: 1;
-  }
 }
 
-/* One column on small screens. */
-
-@media (max-width: 52rem) {
-  .cols {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .cols > .stack:first-child {
-    grid-row: auto;
-  }
-
-  .head {
-    grid-template-columns: minmax(0, 1fr) auto;
-  }
-
-  .head div {
-    grid-column: 1 / -1;
-  }
-}
-
-@media (max-width: 36rem) {
-  body {
-    padding: 0.5rem;
-  }
-
-  .cell {
-    padding: 0.85rem 0.85rem 1rem;
-  }
-
+@media (max-width: 62rem) {
   .strip {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(3, 6rem);
   }
 
   .strip figcaption {
     grid-column: 1 / -1;
     padding-left: 0;
   }
+}
 
-  /* The widest grid of characters is 48 columns: shrink it to fit. */
+/* One column on small screens. */
 
-  .level pre {
-    font-size: min(1em, 1.95vw);
+@media (max-width: 44rem) {
+  :root {
+    --pad: 0.85rem;
+  }
+
+  body {
+    padding: 0.5rem;
+  }
+
+  .cols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cols > :first-child {
+    grid-row: auto;
+  }
+
+  .strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Larger tap areas on touch screens only, so the desktop stays dense. */
+
+@media (pointer: coarse) {
+  .plain a,
+  .links a {
+    display: inline-block;
+    padding-block: 0.4rem;
+  }
+}
+
+/* On paper: black on white, same grid. */
+
+@media print {
+  :root {
+    --black: #fff;
+    --white: #000;
+    color-scheme: light;
+  }
+
+  body {
+    padding: 0;
   }
 }
