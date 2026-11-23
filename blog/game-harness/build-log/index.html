@@ -64,7 +64,6 @@ async function tryKey(key) {
   return new TextDecoder().decode(pt);
 }
 function show(html) {
-  html = html.replace(/href="day/g, 'href="../day');
   // document.write during parsing INSERTS instead of replacing (the "gate stuck
   // above the page" bug on refresh) — always wait until the document is fully
   // loaded, then rewrite it in standards mode.

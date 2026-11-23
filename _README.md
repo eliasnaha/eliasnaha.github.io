@@ -14,10 +14,8 @@ assets/og.png           preview image for shared links
 assets/fonts/           Newsreader (variable, SIL Open Font License, see OFL.txt)
 assets/img/             figures for the research entries (720 px webp)
 
-blog/game-harness/      write-up of the game harness (generated elsewhere, committed as built)
-
-build-log/index.html    password-gated landing of the build log
-day1/ ... day5/         password-gated build-log pages
+blog/game-harness/            write-up of the game harness (generated elsewhere, committed as built)
+blog/game-harness/build-log/  its password-gated build log: landing page plus day1/ ... day5/
 ```
 
 ## Editing the portfolio
@@ -32,6 +30,6 @@ this folder and open `http://localhost:8000/`.
 
 ## Build log
 
-The build-log pages are committed as built: each one is an encrypted page with
-a small unlock form. Their sources and the script that encrypts them are kept
-outside this repository.
+The build-log pages under `blog/game-harness/build-log/` are committed as
+built: each one is an encrypted page with a small unlock form. Their sources
+and the script that encrypts them are kept outside this repository.
