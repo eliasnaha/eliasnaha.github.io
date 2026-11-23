@@ -1,0 +1,440 @@
+@font-face {
+  font-family: "Newsreader";
+  src: url("fonts/newsreader-roman.woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Newsreader";
+  src: url("fonts/newsreader-italic.woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: italic;
+  font-display: swap;
+}
+
+:root {
+  --paper: #ffffff;
+  --ink: #16191b;
+  --soft: #5a6367;
+  --rule: #dfe3e2;
+  --accent: #0b6e5f;
+  --window: rgb(11 110 95 / 0.11);
+
+  --side: 10rem;
+  --gap: 3rem;
+  --measure: 36rem;
+
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #131615;
+    --ink: #e8ebea;
+    --soft: #99a3a0;
+    --rule: #2b312f;
+    --accent: #62c7b3;
+    --window: rgb(98 199 179 / 0.16);
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0 auto;
+  max-width: 64rem;
+  padding: 0 clamp(1.25rem, 5vw, 3rem);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Newsreader", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  font-size: 1.1875rem;
+  line-height: 1.58;
+  font-optical-sizing: auto;
+  font-variant-numeric: lining-nums;
+  text-rendering: optimizeLegibility;
+}
+
+p,
+h1,
+h2,
+h3,
+figure,
+ul {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+code {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.8em;
+}
+
+/* Top line: name on the left, ways to reach me on the right. */
+
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 2rem;
+  padding-block: 2.25rem 0;
+}
+
+.name {
+  font-size: 1.375rem;
+  font-weight: 560;
+  letter-spacing: -0.005em;
+}
+
+.elsewhere {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.5rem;
+  font-size: 1.0625rem;
+}
+
+/* Padding widens the tap area; the negative margin keeps the layout as it was. */
+
+.elsewhere a,
+.links a {
+  padding-block: 0.5rem;
+  margin-block: -0.5rem;
+}
+
+/* The opening statement. */
+
+.lede {
+  max-width: 19em;
+  margin-block: clamp(4rem, 13vh, 8rem) clamp(3rem, 8vh, 5rem);
+  font-size: clamp(2.125rem, 1.2rem + 3.6vw, 3.5rem);
+  font-weight: 380;
+  line-height: 1.1;
+  letter-spacing: -0.018em;
+  text-wrap: balance;
+}
+
+/* The figure: one trace, pooled into coarser and coarser tokens. */
+
+.signal {
+  margin-bottom: clamp(4.5rem, 12vh, 7.5rem);
+}
+
+.signal:not([data-ready]) {
+  visibility: hidden;
+}
+
+.stages {
+  touch-action: pan-y;
+}
+
+.stages:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 0.5rem;
+}
+
+.stage {
+  display: grid;
+  grid-template-columns: var(--side) minmax(0, 1fr);
+  column-gap: var(--gap);
+  align-items: center;
+}
+
+.stage + .stage {
+  margin-top: 0.5rem;
+}
+
+.stage-label {
+  color: var(--soft);
+  font-size: 1rem;
+  font-style: italic;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.stage svg {
+  display: block;
+  width: 100%;
+  height: 4.25rem;
+  overflow: visible;
+}
+
+.trace {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.15;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Long flat runs look thinner than a busy trace at the same width. */
+
+.stage[data-stride="16"] .trace,
+.stage[data-stride="64"] .trace {
+  stroke-width: 1.4;
+}
+
+.window {
+  fill: var(--window);
+}
+
+.mark {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.25;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.stage[data-stride="1"] .mark {
+  stroke-width: 6;
+}
+
+.signal figcaption {
+  max-width: var(--measure);
+  margin-top: 1.5rem;
+  margin-left: calc(var(--side) + var(--gap));
+  color: var(--soft);
+  font-size: 1rem;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+@media (forced-colors: active) {
+  .trace { stroke: CanvasText; }
+  .mark { stroke: Highlight; }
+  .window { fill: Highlight; fill-opacity: 0.25; }
+}
+
+/* The traces draw themselves once, top to bottom, when the page opens.
+   The clip is only held before and during the animation: left in place
+   afterwards it would shave the stroke where the trace meets its own edge. */
+
+@media (prefers-reduced-motion: no-preference) {
+  .signal[data-ready] .trace {
+    animation: draw 1.1s cubic-bezier(0.45, 0, 0.2, 1) backwards;
+  }
+
+  .signal[data-ready] .stage:nth-child(2) .trace { animation-delay: 0.14s; }
+  .signal[data-ready] .stage:nth-child(3) .trace { animation-delay: 0.28s; }
+  .signal[data-ready] .stage:nth-child(4) .trace { animation-delay: 0.42s; }
+
+  .signal[data-ready] .window,
+  .signal[data-ready] .mark {
+    animation: appear 0.5s 1.5s both;
+  }
+}
+
+@keyframes draw {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+
+@keyframes appear {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* A band is one section: its name in the margin, its content beside it. */
+
+.band {
+  display: grid;
+  grid-template-columns: var(--side) minmax(0, var(--measure));
+  column-gap: var(--gap);
+  align-items: start;
+  margin-bottom: clamp(3.5rem, 9vh, 5.5rem);
+}
+
+.side {
+  position: sticky;
+  top: 1.5rem;
+  color: var(--soft);
+  font-size: 1.1875rem;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.main p,
+.changes li {
+  text-wrap: pretty;
+}
+
+.main > p + p {
+  margin-top: 1em;
+}
+
+.nb {
+  white-space: nowrap;
+}
+
+.entry + .entry {
+  margin-top: 2.75rem;
+}
+
+/* Sections whose entries are a name and one line sit closer together. */
+
+.compact .entry + .entry {
+  margin-top: 1.25rem;
+}
+
+.entry h3 {
+  font-size: 1.4375rem;
+  font-weight: 520;
+  line-height: 1.22;
+  letter-spacing: -0.008em;
+  text-wrap: balance;
+}
+
+.entry p {
+  margin-top: 0.6rem;
+}
+
+.entry .meta {
+  margin-top: 0.3rem;
+}
+
+.meta {
+  color: var(--soft);
+  font-size: 1.0625rem;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.75rem;
+}
+
+.strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.strip img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  background: var(--rule);
+}
+
+/* Fundus images are discs; show them as discs instead of on dark squares. */
+
+.strip-round img {
+  border-radius: 50%;
+}
+
+.strip figcaption {
+  grid-column: 1 / -1;
+  margin-top: 0.15rem;
+  color: var(--soft);
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.changes {
+  margin-top: 1rem;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--rule);
+}
+
+.changes li {
+  padding-block: 0.8rem;
+  border-bottom: 1px solid var(--rule);
+  color: var(--soft);
+  font-size: 1.0625rem;
+  line-height: 1.5;
+}
+
+/* The lower offset keeps the underline clear of underscores in code names. */
+
+.changes a {
+  display: block;
+  color: var(--ink);
+  font-size: 1.1875rem;
+  text-underline-offset: 0.28em;
+}
+
+.changes a:hover {
+  color: var(--accent);
+}
+
+.foot {
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--rule);
+  margin-bottom: 4rem;
+}
+
+.foot .meta {
+  margin-top: 0.5rem;
+}
+
+/* One column on small screens: section names sit above their content. */
+
+@media (max-width: 44rem) {
+  body {
+    font-size: 1.125rem;
+  }
+
+  .top {
+    padding-top: 1.5rem;
+  }
+
+  .band {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 0.75rem;
+  }
+
+  .side {
+    position: static;
+  }
+
+  .stage {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .stage + .stage {
+    margin-top: 1rem;
+  }
+
+  .stage-label {
+    font-size: 0.9375rem;
+  }
+
+  .stage svg {
+    height: 3.25rem;
+  }
+
+  .signal figcaption {
+    margin-left: 0;
+  }
+}
