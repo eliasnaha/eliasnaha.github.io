@@ -9,9 +9,8 @@ index.html              the portfolio (home page)
 404.html                not-found page
 favicon.svg, favicon-32.png, apple-touch-icon.png
 assets/site.css         all styles
-assets/signal.js        the figure under the opening line
 assets/og.png           preview image for shared links
-assets/fonts/           Newsreader (variable, SIL Open Font License, see OFL.txt)
+assets/fonts/           IBM Plex Mono (SIL Open Font License, see OFL.txt)
 assets/img/             figures for the research entries (720 px webp)
 
 blog/game-harness/            write-up of the game harness (generated elsewhere, committed as built)
@@ -20,10 +19,14 @@ blog/game-harness/build-log/  its password-gated build log: landing page plus da
 
 ## Editing the portfolio
 
-Everything is in `index.html`. Each section is a `<section class="band">` with
-its name in an `<h2 class="side">` and its content in `<div class="main">`; each
-item inside is an `<article class="entry">`. Update the "Last updated" line in
-the footer when you change something.
+Everything is in `index.html`. The page is a header plus three columns
+(`<div class="stack">`), and each column holds bordered sections
+(`<section class="cell">`, named by its `<h2>`). Entries separated by a dashed
+rule are `<article class="item">`; the tighter ones are `class="entry"`. Update
+the "updated" date in the header when you change something.
+
+The page uses two colours only, black and white, with no grey: keep it that
+way in `assets/site.css`. Only the photographs carry colour.
 
 To preview, open `index.html` in a browser, or run `python -m http.server` in
 this folder and open `http://localhost:8000/`.

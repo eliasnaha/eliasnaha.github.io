@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Elias Naha</title>
-  <meta name="description" content="Elias Naha works on representation learning for brain signals and images. Research scientist intern at reaDream; Master’s thesis at the MIT Media Lab; Master’s in Data Science from EPFL.">
+  <meta name="description" content="Elias Naha works on representation learning for brain signals and images. Research scientist intern at reaDream; Master's thesis at the MIT Media Lab; Master's in Data Science from EPFL.">
   <meta property="og:title" content="Elias Naha">
   <meta property="og:description" content="Representation learning for brain signals and images.">
   <meta property="og:type" content="website">
@@ -14,241 +14,275 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#131615" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#000000">
   <link rel="canonical" href="https://eliasnaha.github.io/">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="preload" href="assets/fonts/newsreader-roman.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/fonts/newsreader-italic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/plex-mono-400.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/site.css">
-  <noscript><style>.signal { display: none; }</style></noscript>
 </head>
 <body>
 
-<header class="top">
-  <h1 class="name">Elias Naha</h1>
-  <nav class="elsewhere" aria-label="Email and profiles">
-    <a href="mailto:enaha@mit.edu">Email</a>
-    <a href="https://github.com/eliasnaha">GitHub</a>
-    <a href="https://www.linkedin.com/in/elias-naha-607334198/">LinkedIn</a>
-  </nav>
-</header>
+<div class="frame">
 
-<main>
-
-  <p class="lede">I build models that read brain signals and images at several scales at once.</p>
-
-  <figure class="signal" data-signal>
-    <div class="stages" aria-describedby="signal-caption">
-      <div class="stage" data-stride="1">
-        <span class="stage-label">1,024 samples</span>
-        <svg viewBox="0 0 1024 100" preserveAspectRatio="none" aria-hidden="true"></svg>
-      </div>
-      <div class="stage" data-stride="4">
-        <span class="stage-label">256 values</span>
-        <svg viewBox="0 0 1024 100" preserveAspectRatio="none" aria-hidden="true"></svg>
-      </div>
-      <div class="stage" data-stride="16">
-        <span class="stage-label">64 values</span>
-        <svg viewBox="0 0 1024 100" preserveAspectRatio="none" aria-hidden="true"></svg>
-      </div>
-      <div class="stage" data-stride="64">
-        <span class="stage-label">16 values</span>
-        <svg viewBox="0 0 1024 100" preserveAspectRatio="none" aria-hidden="true"></svg>
-      </div>
-    </div>
-    <figcaption id="signal-caption">
-      A synthetic EEG channel, then the same channel averaged in groups of
-      four, three times over. A hierarchical encoder compresses a recording in
-      stages like these: the early stages keep fine timing, the later ones
-      keep slow structure. The shaded window marks one moment in every stage.
-      Move across the figure, or use the arrow keys, to pick another.
-    </figcaption>
-  </figure>
-
-  <section class="band" aria-labelledby="about">
-    <h2 class="side" id="about">About</h2>
-    <div class="main">
+  <header class="cell head">
+    <div>
+      <h1>Elias Naha</h1>
       <p>
-        I am a research scientist intern at reaDream, where I work toward
-        decoding dream content from sleep EEG. I recently finished a Master’s
-        in Data Science at EPFL, with my thesis in the Fluid Interfaces group
-        at the MIT Media Lab.
-      </p>
-      <p>
-        Before that I worked on vision transformers for satellite and medical
-        imagery, taught deep learning at EPFL, and spent six months building
-        product features and an LLM contract-review tool at LegalPass.
+        Machine learning researcher working on representation learning for
+        brain signals and images. Research scientist intern at reaDream,
+        working toward decoding dream content from sleep EEG. Master's in
+        Data Science from EPFL, with my thesis at the MIT Media Lab.
       </p>
     </div>
-  </section>
+    <nav aria-label="Contact">
+      <ul class="plain">
+        <li><a href="mailto:enaha@mit.edu">enaha@mit.edu</a></li>
+        <li><a href="https://github.com/eliasnaha">github.com/eliasnaha</a></li>
+        <li><a href="https://www.linkedin.com/in/elias-naha-607334198/">linkedin.com/in/elias-naha</a></li>
+      </ul>
+    </nav>
+    <p class="aside">Strasbourg, France<br>updated 2026/11</p>
+  </header>
 
-  <section class="band" aria-labelledby="research">
-    <h2 class="side" id="research">Research</h2>
-    <div class="main">
+  <main class="cols">
 
-      <article class="entry">
+  <div class="stack">
+
+    <section class="cell" aria-labelledby="research">
+      <h2 id="research">research</h2>
+
+      <article class="item">
         <h3>Hierarchical representations for brain modeling</h3>
-        <p class="meta">Women in Machine Learning Workshop at NeurIPS 2026</p>
+        <p>Women in Machine Learning Workshop, NeurIPS 2026</p>
         <p>
           I designed an EEG encoder that compresses a recording in stages and
           keeps a separate readout at each one: fine spatial and temporal
           patterns in the early stages, global semantics in the deeper ones.
         </p>
+        <figure class="pyramid">
+          <div class="levels" role="img" aria-label="Three grids of characters. The first is 8 rows by 48 columns and finely textured; the second, 4 by 12, shows the same pattern in coarser blocks; the third is 2 by 3.">
+            <div class="level">
+<pre aria-hidden="true">
+..:.:----=++++=-=--:-+=-=+*%%%##%@@@%*++==-:-::-
+  . :.:--===**+#+**++**+++*#%#+=*#%%#*+===--:.::
+.    .::=-++*###**#*#*++=-*#%#-:=#@@%#*+=-:.:. .
+::::-::---+=*###%%%%%%#+--=*#+:.-+##*+==+=--. .
+=-::--:--=+++#%%#%%%#%%#=-+**+- :++++===++=-:.:.
+**++=--=====+#**#%@@@#%#**=+++:.:-=----==----::-
+**+*+*+=++=++***###**#%##++==-:. ..:...:====+===
+*#**#%#*#+++=++=**#####*###++-.:::.. .:..-==+*=+
+</pre>
+              <span>input: 8 channels x 48 samples</span>
+            </div>
+            <div class="level-pair">
+            <div class="level">
+<pre aria-hidden="true">
+.:=+=+*#%*-:
+.:=##*==**-.
+=-=*%%+--==:
+**++##*-..=+
+</pre>
+              <span>stage 1: 4 x 12</span>
+            </div>
+            <div class="level">
+<pre aria-hidden="true">
+-+=
++*-
+</pre>
+              <span>stage 2: 2 x 3</span>
+            </div>
+            </div>
+          </div>
+          <figcaption>
+            A synthetic EEG patch drawn in characters, then averaged twice
+            over 2 channels and 4 samples. The encoder reads out at each scale.
+          </figcaption>
+        </figure>
       </article>
 
-      <article class="entry">
+      <article class="item">
         <h3>Context-aware semantic segmentation via stage-wise attention</h3>
-        <p class="meta">
-          Antoine Carreaud, Elias Naha, Arthur Chansel, Nina Lahellec, Jan
-          Skaloud and Adrien Gressin. CVPR 2026.
+        <p>
+          A. Carreaud, E. Naha, A. Chansel, N. Lahellec, J. Skaloud,
+          A. Gressin. CVPR 2026
         </p>
         <p>
-          CASWiT (Context-Aware Stage-Wise Transformer) is a memory-efficient
-          transformer for ultra-high-resolution images. One branch sees a
-          downsampled view of the surrounding area and passes that context,
-          stage by stage, to a second branch that works on high-resolution
-          patches. With self-supervised pretraining it reaches state of the
-          art on four large benchmarks across satellite and medical imagery:
-          FLAIR-HUB, URUR, ISIC and CRAIG.
+          CASWiT is a memory-efficient transformer for ultra-high-resolution
+          images. One branch sees a downsampled view of the surrounding area
+          and passes that context, stage by stage, to a second branch that
+          works on high-resolution patches. With self-supervised pretraining
+          it reaches state of the art on four large benchmarks across
+          satellite and medical imagery: FLAIR-HUB, URUR, ISIC and CRAIG.
         </p>
         <figure class="strip">
           <img src="assets/img/uhr-1.webp" width="720" height="720" loading="lazy" alt="Aerial photograph of farmland with a few houses along a road.">
           <img src="assets/img/uhr-2.webp" width="720" height="720" loading="lazy" alt="Close-up of the same scene: two houses, a road and a ploughed field.">
           <img src="assets/img/uhr-3.webp" width="720" height="720" loading="lazy" alt="The close-up colored by predicted land-cover class: buildings, road, vegetation and field.">
-          <figcaption>An aerial tile, a detail of it, and the predicted land cover.</figcaption>
+          <figcaption>
+            An aerial tile, a detail of it, and the predicted land cover.
+            <span class="links">
+              [<a href="https://arxiv.org/abs/2601.11310">paper on arXiv</a>]
+              [<a href="https://huggingface.co/collections/heig-vd-geo/caswit">code on Hugging Face</a>]
+            </span>
+          </figcaption>
         </figure>
-        <p class="links">
-          <a href="https://arxiv.org/abs/2601.11310">Read the paper on arXiv</a>
-          <a href="https://huggingface.co/collections/heig-vd-geo/caswit">Get the code on Hugging Face</a>
-        </p>
       </article>
 
-      <article class="entry">
+      <article class="item">
         <h3>Anatomically-guided vision transformer for interpretable glaucoma screening</h3>
-        <p class="meta">ARVO 2026</p>
+        <p>ARVO 2026</p>
         <p>
           A vision transformer that screens fundus photographs for glaucoma,
           with anatomical priors taken from optic disc and retinal vessel
           segmentation. Its attention concentrates on the optic disc and the
-          vessels around it. I built the full machine learning pipeline as the
-          only engineer on a clinical team.
+          vessels around it. I built the full machine learning pipeline as
+          the only engineer on a clinical team.
         </p>
         <figure class="strip strip-round">
           <img src="assets/img/glaucoma-1.webp" width="720" height="720" loading="lazy" alt="Color photograph of a retina, with the optic disc and blood vessels visible.">
           <img src="assets/img/glaucoma-2.webp" width="720" height="720" loading="lazy" alt="A retina image processed so that the vessels and optic disc stand out.">
           <img src="assets/img/glaucoma-3.webp" width="720" height="720" loading="lazy" alt="The processed retina with a heat map concentrated on the optic disc.">
-          <figcaption>A fundus photograph, an enhanced view of the vessels, and where the model looks.</figcaption>
+          <figcaption>
+            A fundus photograph, an enhanced view of the vessels, and where
+            the model looks.
+          </figcaption>
         </figure>
       </article>
+    </section>
 
-    </div>
-  </section>
+  </div>
 
-  <section class="band" aria-labelledby="open-source">
-    <h2 class="side" id="open-source">Open source</h2>
-    <div class="main">
+  <div class="stack">
+
+    <section class="cell" aria-labelledby="experience">
+      <h2 id="experience">experience</h2>
+
+      <article class="item">
+        <p class="when">2026/09 - now</p>
+        <div>
+          <h3>reaDream, research scientist intern</h3>
+          <p>
+            I train contrastive models that align REM-sleep EEG with waking
+            visual-imagery EEG in a shared embedding space, as a step toward
+            decoding dream content from sleep recordings. I am also testing
+            high-frequency EEG as encoder input, to capture the fine visual
+            detail the two states share.
+          </p>
+        </div>
+      </article>
+
+      <article class="item">
+        <p class="when">2025/08 - 2026/02</p>
+        <div>
+          <h3>LegalPass, AI engineer</h3>
+          <p>
+            I shipped full-stack features in weekly production sprints
+            through a launch that reached more than 100 clients, and built an
+            LLM contract-review system that flags predatory clauses, with a
+            rollback mechanism for human validation, refined daily with
+            in-house lawyers to fit client needs and Swiss legal requirements.
+          </p>
+        </div>
+      </article>
+
+      <article class="item">
+        <p class="when">2024/01 - 2025/06</p>
+        <div>
+          <h3>VITA lab, EPFL, teaching assistant</h3>
+          <p>
+            Deep Learning for Autonomous Vehicles. I taught multi-modal
+            architectures, transformers and attention to 40 master's students
+            in weekly coding sessions, and supervised capstone projects on
+            autonomous driving models.
+          </p>
+        </div>
+      </article>
+    </section>
+
+    <section class="cell" aria-labelledby="education">
+      <h2 id="education">education</h2>
 
       <article class="entry">
+        <p class="when">2023/09 - 2026/10</p>
+        <div>
+          <h3>EPFL, Master's in Data Science</h3>
+        </div>
+      </article>
+
+      <article class="entry">
+        <p class="when">2026/02 - 2026/10</p>
+        <div>
+          <h3>MIT, Master's thesis</h3>
+          <p>Fluid Interfaces group, Media Lab. Grade 6/6.</p>
+        </div>
+      </article>
+    </section>
+
+  </div>
+
+  <div class="stack">
+
+    <section class="cell" aria-labelledby="open-source">
+      <h2 id="open-source">open source</h2>
+
+      <article>
         <h3>A harness that proves generated games are playable</h3>
         <p>
-          It turns a text prompt into a Godot game, then certifies the game by
-          finding a winning play and replaying it. In six days it certified
-          169 games.
-        </p>
-        <p class="links">
-          <a href="blog/game-harness/">Read the harness write-up</a>
-          <a href="https://github.com/eliasnaha/gi-harness">Browse the harness code on GitHub</a>
-        </p>
-      </article>
-
-    </div>
-  </section>
-
-  <section class="band" aria-labelledby="experience">
-    <h2 class="side" id="experience">Experience</h2>
-    <div class="main">
-
-      <article class="entry">
-        <h3>reaDream</h3>
-        <p class="meta">Research scientist intern, September 2026 to present</p>
-        <p>
-          I train contrastive models that align REM-sleep EEG with waking
-          <span class="nb">visual-imagery</span> EEG in a shared embedding
-          space, as a step toward decoding dream content from sleep
-          recordings. I am also testing high-frequency EEG as encoder input,
-          to capture the fine visual detail the two states share.
+          It turns a text prompt into a Godot game, then certifies the game
+          by finding a winning play and replaying it. In six days it
+          certified 169 games.
+          <span class="links">
+            [<a href="blog/game-harness/">harness write-up</a>]
+            [<a href="https://github.com/eliasnaha/gi-harness">harness code on GitHub</a>]
+          </span>
         </p>
       </article>
+    </section>
 
-      <article class="entry">
-        <h3>LegalPass</h3>
-        <p class="meta">AI engineer, August 2025 to February 2026</p>
-        <p>
-          I shipped full-stack features in weekly production sprints through a
-          launch that reached more than 100 clients, and built an LLM
-          contract-review system that flags predatory clauses. It has a
-          rollback mechanism for human validation and was refined daily with
-          in-house lawyers to fit client needs and Swiss legal requirements.
-        </p>
-      </article>
+    <section class="cell" aria-labelledby="skills">
+      <h2 id="skills">skills</h2>
 
-      <article class="entry">
-        <h3>VITA lab, EPFL</h3>
-        <p class="meta">Teaching assistant, Deep Learning for Autonomous Vehicles, January 2024 to June 2025</p>
-        <p>
-          I taught multi-modal architectures, transformers and attention to 40
-          master’s students in weekly coding sessions, and supervised capstone
-          projects on autonomous driving models, including data augmentation
-          and trajectory prediction.
-        </p>
-      </article>
+      <dl class="pairs">
+        <div class="entry">
+          <dt>learning</dt>
+          <dd>contrastive learning, self-supervised pretraining, autoregressive image generation</dd>
+        </div>
+        <div class="entry">
+          <dt>vision</dt>
+          <dd>vision transformers, semantic segmentation, medical and satellite imagery</dd>
+        </div>
+        <div class="entry">
+          <dt>training</dt>
+          <dd>PyTorch, HuggingFace, multi-GPU DDP on SLURM clusters, Triton kernels</dd>
+        </div>
+        <div class="entry">
+          <dt>code</dt>
+          <dd>Python, Java, C, Scala, TypeScript, React, PostgreSQL, NumPy, Polars</dd>
+        </div>
+        <div class="entry">
+          <dt>languages</dt>
+          <dd>French (native), English (C2), German (B1)</dd>
+        </div>
+      </dl>
+    </section>
 
-    </div>
-  </section>
-
-  <section class="band compact" aria-labelledby="education">
-    <h2 class="side" id="education">Education</h2>
-    <div class="main">
-
-      <article class="entry">
-        <h3>EPFL</h3>
-        <p class="meta">Master’s in Data Science, 2023 to 2026</p>
-      </article>
-
-      <article class="entry">
-        <h3>MIT</h3>
-        <p class="meta">Master’s thesis, Fluid Interfaces group, February to October 2026. Grade 6/6.</p>
-      </article>
-
-    </div>
-  </section>
-
-  <section class="band" aria-labelledby="outside">
-    <h2 class="side" id="outside">Outside work</h2>
-    <div class="main">
+    <section class="cell" aria-labelledby="outside">
+      <h2 id="outside">outside work</h2>
       <p>
-        I played football for eleven years as a center-back at the
-        pre-national level, won three Alsace championships, and more recently
-        won the Swiss university Student Games with EPFL. I have also been
-        ranked first in the world on Vel’Koz, a League of Legends champion,
-        and reached a skill rating of 4850 in Overwatch.
+        Football for eleven years as a center-back at the pre-national level:
+        three Alsace championships, then the Swiss university Student Games
+        with EPFL. In games, ranked first in the world on Vel'Koz in League
+        of Legends, and a skill rating of 4850 in Overwatch.
       </p>
-    </div>
-  </section>
+    </section>
 
-</main>
-
-<footer class="band foot">
-  <h2 class="side" id="contact">Contact</h2>
-  <div class="main">
-    <p><a href="mailto:enaha@mit.edu">enaha@mit.edu</a></p>
-    <p class="meta">Strasbourg, France. Last updated November 2026.</p>
   </div>
-</footer>
 
-<script src="assets/signal.js" defer></script>
+  </main>
+
+</div>
+
 </body>
 </html>
