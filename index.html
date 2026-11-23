@@ -101,7 +101,7 @@
         <h3>Context-aware semantic segmentation via stage-wise attention</h3>
         <p class="meta">
           Antoine Carreaud, Elias Naha, Arthur Chansel, Nina Lahellec, Jan
-          Skaloud and Adrien Gressin. Findings of CVPR 2026.
+          Skaloud and Adrien Gressin. CVPR 2026.
         </p>
         <p>
           CASWiT (Context-Aware Stage-Wise Transformer) is a memory-efficient
@@ -160,37 +160,6 @@
           <a href="blog/game-harness/">Read the harness write-up</a>
           <a href="https://github.com/eliasnaha/gi-harness">Browse the harness code on GitHub</a>
         </p>
-      </article>
-
-      <article class="entry">
-        <h3>Contributions to godot_rl_agents</h3>
-        <p>
-          Running the harness at scale exposed a few bugs and gaps in
-          <a href="https://github.com/edbeeching/godot_rl_agents">godot_rl_agents</a>,
-          the reinforcement-learning library for the Godot engine. I sent four
-          small pull requests upstream, and all four are awaiting review.
-        </p>
-        <ul class="changes">
-          <li>
-            <a href="https://github.com/edbeeching/godot_rl_agents/pull/263">Pass <code>--fixed-fps</code> as two arguments</a>
-            Passing a frame rate stopped the game from launching on Godot 4.7.
-          </li>
-          <li>
-            <a href="https://github.com/edbeeching/godot_rl_agents/pull/264">Implement <code>step_async</code> and <code>step_wait</code></a>
-            The asynchronous step ran the whole step and cached the result, so
-            sending and receiving were never separate. This splits them.
-          </li>
-          <li>
-            <a href="https://github.com/edbeeching/godot_rl_agents/pull/265">Forward the reset seed and implement <code>VecEnv.seed</code></a>
-            Seeds passed to reset were silently dropped, and creating PPO with
-            a seed raised an error.
-          </li>
-          <li>
-            <a href="https://github.com/edbeeching/godot_rl_agents/pull/266">Add an option to cap the torch thread count</a>
-            On a 32-core node, raising the number of parallel games had
-            stopped improving throughput.
-          </li>
-        </ul>
       </article>
 
     </div>

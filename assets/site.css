@@ -69,8 +69,7 @@ p,
 h1,
 h2,
 h3,
-figure,
-ul {
+figure {
   margin: 0;
 }
 
@@ -90,11 +89,6 @@ a:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
   border-radius: 1px;
-}
-
-code {
-  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  font-size: 0.8em;
 }
 
 /* Top line: name on the left, ways to reach me on the right. */
@@ -280,8 +274,7 @@ code {
   font-weight: 400;
 }
 
-.main p,
-.changes li {
+.main p {
   text-wrap: pretty;
 }
 
@@ -358,34 +351,6 @@ code {
   color: var(--soft);
   font-size: 1rem;
   line-height: 1.45;
-}
-
-.changes {
-  margin-top: 1rem;
-  padding: 0;
-  list-style: none;
-  border-top: 1px solid var(--rule);
-}
-
-.changes li {
-  padding-block: 0.8rem;
-  border-bottom: 1px solid var(--rule);
-  color: var(--soft);
-  font-size: 1.0625rem;
-  line-height: 1.5;
-}
-
-/* The lower offset keeps the underline clear of underscores in code names. */
-
-.changes a {
-  display: block;
-  color: var(--ink);
-  font-size: 1.1875rem;
-  text-underline-offset: 0.28em;
-}
-
-.changes a:hover {
-  color: var(--accent);
 }
 
 .foot {
