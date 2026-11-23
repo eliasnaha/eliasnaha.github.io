@@ -186,7 +186,7 @@ h1 {
 
 .cols {
   display: grid;
-  grid-template-columns: minmax(0, 5.4fr) minmax(0, 3.3fr) minmax(0, 3.3fr);
+  grid-template-columns: minmax(0, 5.4fr) minmax(0, 3.4fr) minmax(0, 3.2fr);
   gap: 1px;
 }
 
